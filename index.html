@@ -700,7 +700,7 @@ function vLeads(){
   const chips=[]; if(S.fStage==='__open') chips.push(['fStage','Open leads only']);
   return `<div class="page-head"><div class="grow"><h1>Leads</h1><p>Buyers, tenants, sellers and owners from first call to closure.</p></div>
     ${S.me.canWrite?`<button class="btn primary big add-desk" data-act="add">${ICON.plus}Add lead</button>`:''}</div>
-  <div class="tabs" role="tablist">${tab('all','All Leads')}${tab('buy','Buy Property')}${tab('rent','Rent Property')}${tab('sell','Sell Property')}${tab('rentout','Rent Out Property')}</div>
+  <div class="tabs" role="tablist">${tab('all','All Leads')}${tab('buy','Buy')}${tab('rent','Rent (Tenants)')}${tab('sell','Sell')}${tab('rentout','Rent Out (Owners)')}</div>
   <div class="filters">
     <input type="search" id="q" placeholder="Search name or phone" value="${esc(S.q)}" data-act="q" aria-label="Search name or phone">
     <select id="fStage" data-act="filt" data-f="fStage" aria-label="Stage"><option value="">All stages</option><option value="__open"${S.fStage==='__open'?' selected':''}>Open (not closed)</option>${opts(STAGES,S.fStage)}</select>
