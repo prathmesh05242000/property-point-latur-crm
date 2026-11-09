@@ -16,6 +16,7 @@
   --teal:#0A7F62; --teal-hover:#086B52; --teal-soft:#DCF6EE; --teal-deep:#0F3D35; --on-teal:#FFFFFF;
   --rent:#594594; --rent-soft:#ECE7F7;
   --sell:#1D5FA6; --sell-soft:#E2EDF9;
+  --ro:#A3366F; --ro-soft:#F8E4EE;
   --hot:#B5381F; --hot-soft:#FBE7E2; --warm:#9E5E06; --warm-soft:#FAEFDB; --cold:#3D6080; --cold-soft:#E4ECF4;
   --won:#1C6E44; --won-soft:#E0F1E6; --lost:#6B6B6B; --lost-soft:#EEEEEE;
   --mark:#06D9A6; --focus:#0A9C78; --scrim:rgba(8,30,30,.45);
@@ -32,6 +33,7 @@
     --teal:#2FD4A8; --teal-hover:#5BE0BD; --teal-soft:#133A31; --teal-deep:#0A2A23; --on-teal:#04221A;
     --rent:#B3A3E8; --rent-soft:#2A2442;
     --sell:#8DBBF0; --sell-soft:#1A2B40;
+    --ro:#E89BC0; --ro-soft:#3A1F2D;
     --hot:#F08A72; --hot-soft:#3D221C; --warm:#E9B65C; --warm-soft:#3A2E17; --cold:#93B6D6; --cold-soft:#1D2C3A;
     --won:#7FD3A2; --won-soft:#173226; --lost:#AAAAAA; --lost-soft:#2A2A2A;
     --scrim:rgba(0,0,0,.6); --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.3);
@@ -44,6 +46,7 @@
   --teal:#2FD4A8; --teal-hover:#5BE0BD; --teal-soft:#133A31; --teal-deep:#0A2A23; --on-teal:#04221A;
   --rent:#B3A3E8; --rent-soft:#2A2442;
   --sell:#8DBBF0; --sell-soft:#1A2B40;
+  --ro:#E89BC0; --ro-soft:#3A1F2D;
   --hot:#F08A72; --hot-soft:#3D221C; --warm:#E9B65C; --warm-soft:#3A2E17; --cold:#93B6D6; --cold-soft:#1D2C3A;
   --won:#7FD3A2; --won-soft:#173226; --lost:#AAAAAA; --lost-soft:#2A2A2A;
   --scrim:rgba(0,0,0,.6); --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.3);
@@ -108,6 +111,7 @@ h3{font-size:16px;margin:0 0 6px;font-weight:600}
 .b-buy{background:var(--teal-soft);color:var(--teal)}
 .b-rent{background:var(--rent-soft);color:var(--rent)}
 .b-sell{background:var(--sell-soft);color:var(--sell)}
+.b-ro{background:var(--ro-soft);color:var(--ro)}
 .b-hot{background:var(--hot-soft);color:var(--hot)}
 .b-warm{background:var(--warm-soft);color:var(--warm)}
 .b-cold{background:var(--cold-soft);color:var(--cold)}
@@ -119,7 +123,7 @@ h3{font-size:16px;margin:0 0 6px;font-weight:600}
 .due-today{color:var(--warm);font-weight:600}
 
 /* Dashboard */
-.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-bottom:26px}
+.kpis{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:12px;margin-bottom:26px}
 .kpi{all:unset;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px 16px;display:flex;flex-direction:column;gap:2px;border-top:4px solid var(--k,var(--teal))}
 .kpi:hover{box-shadow:var(--shadow)}
 .kpi:focus-visible{outline:3px solid var(--focus)}
@@ -242,7 +246,8 @@ dl.facts dd{margin:0;overflow-wrap:anywhere}
 .f textarea{min-height:80px;resize:vertical}
 .f input:focus,.f select:focus,.f textarea:focus,.filters input:focus,.filters select:focus{outline:2px solid var(--teal);outline-offset:0;border-color:var(--teal)}
 .phone{display:grid;grid-template-columns:78px 1fr;gap:6px}
-.typepick{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.typepick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+@media (max-width:640px){.typepick{grid-template-columns:1fr 1fr}}
 .typepick label{cursor:pointer;border:2px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
 .typepick label b{font-size:18px}
 .typepick label span{color:var(--muted);font-size:14px}
@@ -250,6 +255,7 @@ dl.facts dd{margin:0;overflow-wrap:anywhere}
 .typepick label:has(input:checked){border-color:var(--teal);background:var(--teal-soft)}
 .typepick label.rentpick:has(input:checked){border-color:var(--rent);background:var(--rent-soft)}
 .typepick label.sellpick:has(input:checked){border-color:var(--sell);background:var(--sell-soft)}
+.typepick label.ropick:has(input:checked){border-color:var(--ro);background:var(--ro-soft)}
 .typepick label:has(input:focus-visible){outline:3px solid var(--focus)}
 .locs{display:flex;flex-wrap:wrap;gap:6px}
 .locs label{cursor:pointer;border:1px solid var(--line);border-radius:20px;padding:4px 12px;font-size:15px;display:inline-flex;gap:6px;align-items:center}
@@ -267,7 +273,7 @@ details.more[open] summary::before{content:"− "}
 details.more .form{margin-top:14px}
 .sect{font-weight:700;font-size:15px;color:var(--muted);margin:4px 0 -4px}
 form[data-type="buy"] .rent-only,form[data-type="rent"] .buy-only{display:none}
-form:not([data-type="sell"]) .sell-only,form[data-type="sell"] .buy-only,form[data-type="sell"] .rent-only,form[data-type="sell"] .not-sell{display:none}
+form:not([data-type="sell"]) .sell-only,form:not([data-type="rentout"]) .ro-only,form:not([data-type="sell"]):not([data-type="rentout"]) .owner-only,form[data-type="sell"] .buy-only,form[data-type="sell"] .rent-only,form[data-type="sell"] .not-owner,form[data-type="rentout"] .buy-only,form[data-type="rentout"] .rent-only,form[data-type="rentout"] .not-owner{display:none}
 .sheet-foot{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap}
 .dup{background:var(--warm-soft);border:1px solid color-mix(in srgb,var(--warm) 40%,transparent);border-radius:10px;padding:12px 14px}
 .dup ul{margin:6px 0 10px;padding-left:18px}
@@ -292,7 +298,8 @@ form:not([data-type="sell"]) .sell-only,form[data-type="sell"] .buy-only,form[da
 .pend{background:var(--warm-soft);color:var(--warm)}
 
 /* Responsive */
-@media (max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr)}.dash-grid,.detail-grid{grid-template-columns:1fr}}
+@media (max-width:1380px){.kpis{grid-template-columns:repeat(4,1fr)}}
+@media (max-width:1100px){.kpis{grid-template-columns:repeat(4,1fr)}.dash-grid,.detail-grid{grid-template-columns:1fr}}
 @media (max-width:820px){
   .app{grid-template-columns:1fr}
   .side{display:none}
@@ -366,6 +373,7 @@ const BASE_LOCS=['Ausa Road','Old Ausa Road','Barshi Road','Ambajogai Road'];
 const SOURCES=['Phone Call','WhatsApp','Website','Google Business Profile','Instagram','Facebook','Referral','Walk-in','Other'];
 const PRIORITIES=['Hot','Warm','Cold'];
 const FINANCE=['Cash','Home loan','Not decided'];
+const TENANT_PREF=['Family','Bachelors','Working professionals','Company lease','Any'];
 const NEGOTIABLE=['Yes','Slightly','No (fixed price)'];
 const TIMELINES=['Immediately','Within 1 month','1–3 months','3–6 months','6+ months','Not decided'];
 const FURNISH=['Unfurnished','Semi-furnished','Fully furnished','Any'];
@@ -398,8 +406,8 @@ function rangeText(min,max,suffix=''){
   if(a) return `From ${a}${suffix}`;
   return '';
 }
-function budgetText(l){return l.type==='buy'?rangeText(l.budgetMin,l.budgetMax):l.type==='sell'?(fmtINR(l.askingPrice)?'Asking '+fmtINR(l.askingPrice):''):rangeText(l.rentMin,l.rentMax,'/month')}
-function typeLabel(t){return t==='buy'?'Buy':t==='sell'?'Sell':'Rent'}
+function budgetText(l){return l.type==='rentout'?(fmtINR(l.expectedRent)?'Expects '+fmtINR(l.expectedRent)+'/month':''):l.type==='buy'?rangeText(l.budgetMin,l.budgetMax):l.type==='sell'?(fmtINR(l.askingPrice)?'Asking '+fmtINR(l.askingPrice):''):rangeText(l.rentMin,l.rentMax,'/month')}
+function typeLabel(t){return t==='buy'?'Buy':t==='sell'?'Sell':t==='rentout'?'Rent out':'Rent'}
 function normPhone(cc,num){
   let raw=String(num||'').trim(); if(!raw) return '';
   let c=String(cc||'+91').replace(/\D/g,'')||'91';
@@ -654,7 +662,7 @@ function go(view,extra={}){ Object.assign(S,{view},extra); render.keepScroll=fal
 
 function vDash(){
   const a=allLeads(), f=followUps(), v=upcomingVisits();
-  const ob=a.filter(l=>l.type==='buy'&&isOpen(l)).length, orr=a.filter(l=>l.type==='rent'&&isOpen(l)).length, os=a.filter(l=>l.type==='sell'&&isOpen(l)).length;
+  const ob=a.filter(l=>l.type==='buy'&&isOpen(l)).length, orr=a.filter(l=>l.type==='rent'&&isOpen(l)).length, os=a.filter(l=>l.type==='sell'&&isOpen(l)).length, oro=a.filter(l=>l.type==='rentout'&&isOpen(l)).length;
   const k=(n,l,act,c)=>`<button class="kpi" style="--k:${c}" data-act="${act}"><span class="n">${n}</span><span class="l">${l}</span></button>`;
   const counts=STAGES.map(s=>[s,a.filter(l=>l.stage===s).length]); const mx=Math.max(1,...counts.map(c=>c[1]));
   const attn=[...f.overdue,...f.today].slice(0,6);
@@ -666,6 +674,7 @@ function vDash(){
     ${k(ob,'Open buyer leads','dash-buy','var(--emerald)')}
     ${k(orr,'Open rental leads','dash-rent','var(--rent)')}
     ${k(os,'Open seller leads','dash-sell','var(--sell)')}
+    ${k(oro,'Owners renting out','dash-rentout','var(--ro)')}
     ${k(f.today.length,'Follow-ups due today','dash-today','var(--warm)')}
     ${k(f.overdue.length,'Overdue follow-ups','dash-over','var(--hot)')}
     ${k(v.length,'Upcoming site visits','dash-visits','var(--sage)')}
@@ -679,19 +688,19 @@ function vDash(){
   </div>`;
 }
 
-function leadTypeBadge(l){return l.type==='buy'?'<span class="badge b-buy">Buy</span>':l.type==='sell'?'<span class="badge b-sell">Sell</span>':'<span class="badge b-rent">Rent</span>'}
+function leadTypeBadge(l){return l.type==='buy'?'<span class="badge b-buy">Buy</span>':l.type==='sell'?'<span class="badge b-sell">Sell</span>':l.type==='rentout'?'<span class="badge b-ro">Rent out</span>':'<span class="badge b-rent">Rent</span>'}
 function prioBadge(p){return p?`<span class="badge b-${p.toLowerCase()}">${esc(p)}</span>`:''}
 function stagePill(s){return `<span class="stage ${s==='Closed Won'?'won':s==='Closed Lost'?'lost':''}">${esc(s)}</span>`}
 function propText(l){return [l.bhk&&BHK_TYPES.includes(l.propertyType)?l.bhk:'',l.propertyType].filter(Boolean).join(' ')}
 
 function vLeads(){
-  const all=allLeads(); const c={all:all.length,buy:all.filter(l=>l.type==='buy').length,rent:all.filter(l=>l.type==='rent').length,sell:all.filter(l=>l.type==='sell').length};
+  const all=allLeads(); const c={all:all.length,buy:all.filter(l=>l.type==='buy').length,rent:all.filter(l=>l.type==='rent').length,sell:all.filter(l=>l.type==='sell').length,rentout:all.filter(l=>l.type==='rentout').length};
   const rows=filtered();
   const tab=(k,l)=>`<button role="tab" aria-selected="${S.tab===k}" data-act="tab" data-tab="${k}">${l}<span class="c">${c[k]}</span></button>`;
   const chips=[]; if(S.fStage==='__open') chips.push(['fStage','Open leads only']);
-  return `<div class="page-head"><div class="grow"><h1>Leads</h1><p>Buyers, tenants and sellers from first call to closure.</p></div>
+  return `<div class="page-head"><div class="grow"><h1>Leads</h1><p>Buyers, tenants, sellers and owners from first call to closure.</p></div>
     ${S.me.canWrite?`<button class="btn primary big add-desk" data-act="add">${ICON.plus}Add lead</button>`:''}</div>
-  <div class="tabs" role="tablist">${tab('all','All Leads')}${tab('buy','Buy Property')}${tab('rent','Rent Property')}${tab('sell','Sell Property')}</div>
+  <div class="tabs" role="tablist">${tab('all','All Leads')}${tab('buy','Buy Property')}${tab('rent','Rent Property')}${tab('sell','Sell Property')}${tab('rentout','Rent Out Property')}</div>
   <div class="filters">
     <input type="search" id="q" placeholder="Search name or phone" value="${esc(S.q)}" data-act="q" aria-label="Search name or phone">
     <select id="fStage" data-act="filt" data-f="fStage" aria-label="Stage"><option value="">All stages</option><option value="__open"${S.fStage==='__open'?' selected':''}>Open (not closed)</option>${opts(STAGES,S.fStage)}</select>
@@ -712,7 +721,7 @@ function vLeads(){
 function emptyLeads(total){
   if(total) return `<div class="empty panel"><h3>No leads match these filters</h3><button class="btn" data-act="clear-filters">Clear filters</button></div>`;
   if(S.mode==='live'&&!S.loaded) return `<div class="loading">Loading leads…</div>`;
-  return `<div class="empty panel"><h3>No leads yet</h3><p>Add your first enquiry. Only name, mobile and Buy/Rent/Sell are needed to save.</p>
+  return `<div class="empty panel"><h3>No leads yet</h3><p>Add your first enquiry. Only name, mobile and the lead type are needed to save.</p>
     ${S.me.canWrite?`<button class="btn primary" data-act="add">${ICON.plus}Add lead</button>`:''}
     ${S.mode==='live'&&isAdmin()?` <button class="btn" data-act="sample">Add 2 sample leads</button><p class="small">Sample leads are fictional and can be deleted from each lead’s page.</p>`:''}</div>`;
 }
@@ -750,6 +759,7 @@ function vLead(){
   add('Property',esc(propText(l)));
   add('Localities',esc((l.localities||[]).join(', ')));
   if(l.type==='buy'){ add('Budget',esc(budgetText(l))); add('Payment',esc(l.finance)); add('Timeline',esc(l.timeline)); }
+  else if(l.type==='rentout'){ add('Expected rent',esc(budgetText(l))); add('Deposit',esc(fmtINR(l.deposit))); add('Furnishing',esc(l.furnishing)); add('Available from',esc(dateOnly(l.availableFrom))); add('Preferred tenants',esc(l.preferredTenant)); add('Area',esc(l.area)); add('Address',esc(l.address)); }
   else if(l.type==='sell'){ add('Asking price',esc(fmtINR(l.askingPrice))); add('Negotiable',esc(l.negotiable)); add('Area',esc(l.area)); add('Address',esc(l.address)); add('Wants to sell',esc(l.timeline)); add('Documents',esc(l.documents)); }
   else { add('Monthly rent',esc(budgetText(l))); add('Deposit budget',esc(fmtINR(l.deposit))); add('Move-in',esc(dateOnly(l.moveIn))); add('Furnishing',esc(l.furnishing)); }
   add('Mobile',`<a href="tel:${esc(l.phone)}">${esc(fmtPhone(l.phone))}</a>`);
@@ -913,6 +923,7 @@ function leadForm(l){
       <label><input type="radio" name="type" value="buy"${l.type==='buy'?' checked':''}><b>Buy</b><span>Wants to purchase</span></label>
       <label class="rentpick"><input type="radio" name="type" value="rent"${l.type==='rent'?' checked':''}><b>Rent</b><span>Wants to rent</span></label>
       <label class="sellpick"><input type="radio" name="type" value="sell"${l.type==='sell'?' checked':''}><b>Sell</b><span>Wants to sell</span></label>
+      <label class="ropick"><input type="radio" name="type" value="rentout"${l.type==='rentout'?' checked':''}><b>Rent out</b><span>Owner gives on rent</span></label>
     </div>
     <div class="row">
       <label class="f"><span>Client name <em>*</em></span><input name="name" value="${esc(l.name||'')}" autocomplete="off" ${e?'':'autofocus'} placeholder="Name"></label>
@@ -930,7 +941,7 @@ function leadForm(l){
         <label class="f"><span>Property type</span><select name="propertyType" data-act="ptype">${opts(PTYPES,l.propertyType,'Choose')}</select></label>
         <label class="f bhk-f"><span>BHK</span><select name="bhk">${opts(BHKS,l.bhk,'Choose')}</select></label>
       </div>
-      <div class="f"><span><span class="not-sell">Preferred localities</span><span class="sell-only">Property locality</span></span><div class="locs" id="locs">${locs.map(x=>`<label><input type="checkbox" name="loc" value="${esc(x)}"${(l.localities||[]).includes(x)?' checked':''}>${esc(x)}</label>`).join('')}</div>
+      <div class="f"><span><span class="not-owner">Preferred localities</span><span class="owner-only">Property locality</span></span><div class="locs" id="locs">${locs.map(x=>`<label><input type="checkbox" name="loc" value="${esc(x)}"${(l.localities||[]).includes(x)?' checked':''}>${esc(x)}</label>`).join('')}</div>
         <div class="loc-add"><input id="loc-new" placeholder="Other locality" aria-label="Other locality" class="field-in"><button type="button" class="btn" data-act="loc-add">Add</button></div></div>
       <p class="sect buy-only">Purchase</p>
       <div class="row buy-only">${money('budgetMin','Budget from',l.budgetMin,'e.g. 40 lakh')}${money('budgetMax','Budget up to',l.budgetMax,'e.g. 45 lakh')}</div>
@@ -942,11 +953,20 @@ function leadForm(l){
       <div class="row sell-only">${money('askingPrice','Expected price',l.askingPrice,'e.g. 55 lakh')}
         <label class="f"><span>Price negotiable?</span><select name="negotiable">${opts(NEGOTIABLE,l.negotiable,'Choose')}</select></label></div>
       <div class="row sell-only">
-        <label class="f"><span>Area</span><input name="area" value="${esc(l.area||'')}" placeholder="e.g. 1100 sq ft or 2 guntha"></label>
         <label class="f"><span>When do they want to sell?</span><select name="sellTimeline">${opts(TIMELINES,l.type==='sell'?l.timeline:'','Choose')}</select></label>
+        <label class="f"><span>Documents</span><select name="documents">${opts(['Clear title, all papers ready','Papers pending','Loan on property','Not checked yet'],l.documents,'Choose')}</select></label>
       </div>
-      <label class="f sell-only"><span>Property address</span><input name="address" value="${esc(l.address||'')}" placeholder="Building / plot no., street, landmark"></label>
-      <label class="f sell-only"><span>Documents</span><select name="documents">${opts(['Clear title, all papers ready','Papers pending','Loan on property','Not checked yet'],l.documents,'Choose')}</select></label>
+      <p class="sect ro-only">Property for rent (owner)</p>
+      <div class="row ro-only">${money('expectedRent','Expected rent (per month)',l.expectedRent,'e.g. 15000')}${money('roDeposit','Deposit expected',l.type==='rentout'?l.deposit:'','e.g. 50000')}</div>
+      <div class="row3 ro-only">
+        <label class="f"><span>Furnishing</span><select name="roFurnishing">${opts(FURNISH.filter(x=>x!=='Any'),l.type==='rentout'?l.furnishing:'','Choose')}</select></label>
+        <label class="f"><span>Available from</span><input type="date" name="availableFrom" value="${esc(l.availableFrom||'')}"></label>
+        <label class="f"><span>Preferred tenants</span><select name="preferredTenant">${opts(TENANT_PREF,l.preferredTenant,'Choose')}</select></label>
+      </div>
+      <div class="row owner-only">
+        <label class="f"><span>Area</span><input name="area" value="${esc(l.area||'')}" placeholder="e.g. 1100 sq ft or 2 guntha"></label>
+        <label class="f"><span>Property address</span><input name="address" value="${esc(l.address||'')}" placeholder="Building / plot no., street, landmark"></label>
+      </div>
       <p class="sect rent-only">Rental</p>
       <div class="row rent-only">${money('rentMin','Rent from (per month)',l.rentMin,'e.g. 12000')}${money('rentMax','Rent up to (per month)',l.rentMax,'e.g. 15k')}</div>
       <div class="row3 rent-only">${money('deposit','Deposit budget',l.deposit,'e.g. 50000')}
@@ -961,7 +981,7 @@ function leadForm(l){
           :`<div class="f"><span>Assigned agent</span><div style="padding:9px 0">${esc(agentName(l.assignedTo||S.me.id))}</div></div>`}
         ${e?'':dt('nextFollowUp','Next follow-up',l.nextFollowUp?isoToInput(l.nextFollowUp):'')}
       </div>
-      <label class="f not-sell"><span>Listing the client asked about</span><input name="listingUrl" type="url" inputmode="url" value="${esc(l.listingUrl||'')}" placeholder="https://www.propertypointlatur.com/…"></label>
+      <label class="f not-owner"><span>Listing the client asked about</span><input name="listingUrl" type="url" inputmode="url" value="${esc(l.listingUrl||'')}" placeholder="https://www.propertypointlatur.com/…"></label>
       <label class="f"><span>Requirement notes</span><textarea name="notes" placeholder="English or मराठी">${esc(l.notes||'')}</textarea></label>
     </div></details>
     ${foot(e?'Save changes':'Save lead')}
@@ -988,11 +1008,11 @@ async function submitLead(form,orig,force){
   const type=fd.get('type'), name=String(fd.get('name')||'').trim();
   const phone=normPhone(fd.get('cc'),fd.get('phone'));
   const problems=[];
-  if(!type) problems.push('choose Buy, Rent or Sell');
+  if(!type) problems.push('choose Buy, Rent, Sell or Rent out');
   if(!name) problems.push('enter the client’s name');
   if(!validPhone(phone)) problems.push('enter a valid mobile number (10 digits for India)');
   let wa=phone; if(!fd.get('sameWa')){ const w=String(fd.get('whatsapp')||'').trim(); if(w){ wa=normPhone('+91',w); if(!validPhone(wa)) problems.push('check the WhatsApp number'); } }
-  const money={}; for(const k of ['budgetMin','budgetMax','rentMin','rentMax','deposit','askingPrice']){ const v=parseMoney(fd.get(k)); if(Number.isNaN(v)) problems.push(`check the ${k.startsWith('budget')?'budget':k.startsWith('rent')?'rent':k==='askingPrice'?'expected price':'deposit'} amount`); money[k]=Number.isNaN(v)?null:v; }
+  const money={}; for(const k of ['budgetMin','budgetMax','rentMin','rentMax','deposit','askingPrice','expectedRent','roDeposit']){ const v=parseMoney(fd.get(k)); if(Number.isNaN(v)) problems.push(`check the ${k.startsWith('budget')?'budget':k.startsWith('rent')?'rent':k==='askingPrice'?'expected price':k==='expectedRent'?'expected rent':'deposit'} amount`); money[k]=Number.isNaN(v)?null:v; }
   if(type==='buy'&&money.budgetMin&&money.budgetMax&&money.budgetMin>money.budgetMax) problems.push('budget “from” is higher than “up to”');
   if(type==='rent'&&money.rentMin&&money.rentMax&&money.rentMin>money.rentMax) problems.push('rent “from” is higher than “up to”');
   if(problems.length){ err.textContent='To save, '+problems.join('; ')+'.'; err.scrollIntoView({block:'nearest'}); return; }
@@ -1012,10 +1032,15 @@ async function submitLead(form,orig,force){
   const assignedTo=isAdmin()?(fd.get('assignedTo')||S.me.id):(orig?orig.assignedTo:S.me.id);
   Object.assign(l,{type,name,phone,whatsapp:wa,email:String(fd.get('email')||'').trim(),propertyType:fd.get('propertyType')||'',bhk:BHK_TYPES.includes(fd.get('propertyType'))||!fd.get('propertyType')?(fd.get('bhk')||''):'',
     localities:fd.getAll('loc'),source:fd.get('source')||'',priority:fd.get('priority')||'',listingUrl:String(fd.get('listingUrl')||'').trim(),notes:String(fd.get('notes')||'').trim()});
-  const SELL_KEYS=['askingPrice','negotiable','area','address','documents'];
-  if(type==='buy'){ Object.assign(l,{budgetMin:money.budgetMin,budgetMax:money.budgetMax,finance:fd.get('finance')||'',timeline:fd.get('timeline')||''}); for(const k of ['rentMin','rentMax','deposit','moveIn','furnishing',...SELL_KEYS]) delete l[k]; }
-  else if(type==='sell'){ Object.assign(l,{askingPrice:money.askingPrice,negotiable:fd.get('negotiable')||'',area:String(fd.get('area')||'').trim(),address:String(fd.get('address')||'').trim(),documents:fd.get('documents')||'',timeline:fd.get('sellTimeline')||''}); l.listingUrl=''; for(const k of ['budgetMin','budgetMax','finance','rentMin','rentMax','deposit','moveIn','furnishing']) delete l[k]; }
-  else { Object.assign(l,{rentMin:money.rentMin,rentMax:money.rentMax,deposit:money.deposit,moveIn:fd.get('moveIn')||'',furnishing:fd.get('furnishing')||''}); for(const k of ['budgetMin','budgetMax','finance','timeline',...SELL_KEYS]) delete l[k]; }
+  const TYPE_KEYS=['budgetMin','budgetMax','finance','timeline','rentMin','rentMax','deposit','moveIn','furnishing','askingPrice','negotiable','area','address','documents','expectedRent','availableFrom','preferredTenant'];
+  const txtf=k=>String(fd.get(k)||'').trim();
+  const vals=type==='buy'?{budgetMin:money.budgetMin,budgetMax:money.budgetMax,finance:fd.get('finance')||'',timeline:fd.get('timeline')||''}
+    :type==='sell'?{askingPrice:money.askingPrice,negotiable:fd.get('negotiable')||'',area:txtf('area'),address:txtf('address'),documents:fd.get('documents')||'',timeline:fd.get('sellTimeline')||''}
+    :type==='rentout'?{expectedRent:money.expectedRent,deposit:money.roDeposit,furnishing:fd.get('roFurnishing')||'',availableFrom:fd.get('availableFrom')||'',preferredTenant:fd.get('preferredTenant')||'',area:txtf('area'),address:txtf('address')}
+    :{rentMin:money.rentMin,rentMax:money.rentMax,deposit:money.deposit,moveIn:fd.get('moveIn')||'',furnishing:fd.get('furnishing')||''};
+  for(const k of TYPE_KEYS) if(!(k in vals)) delete l[k];
+  Object.assign(l,vals);
+  if(type==='sell'||type==='rentout') l.listingUrl='';
   if(!orig){
     l.assignedTo=assignedTo;
     addAct(l,'created',`Lead added${l.source?' from '+l.source:''}${force?' (same number as an existing lead, separate requirement)':''}`);
@@ -1100,6 +1125,7 @@ function waDraft(l){
   const who=me&&me!=='Admin'?`${me} from Property Point Latur`:'Property Point Latur';
   const prop=[l.bhk,l.propertyType].filter(Boolean).join(' ')||'property';
   const loc=(l.localities||[]).length?` on ${l.localities.join(' / ')}`:'';
+  if(l.type==='rentout') return `Namaskar ${firstName(l.name)}, this is ${who}. Thank you for choosing us to find a tenant for your ${prop}${loc}. I’d like to visit and take a few photos so we can start showing it. When is a good time to talk?`;
   if(l.type==='sell') return `Namaskar ${firstName(l.name)}, this is ${who}. Thank you for choosing us to sell your ${prop}${loc}. I’d like to visit and take a few photos so we can start showing it to buyers. When is a good time to talk?`;
   return l.type==='rent'
     ?`Namaskar ${firstName(l.name)}, this is ${who}. Thank you for your enquiry for a ${prop} on rent${loc}${l.rentMax?`, around ${fmtINR(l.rentMax)}/month`:''}. I’ll share a few options that match. When is a good time to talk?`
@@ -1150,6 +1176,7 @@ document.addEventListener('click',async e=>{
     case 'dash-buy': go('leads',{tab:'buy',fStage:'__open',q:'',fLoc:'',fSource:'',fAgent:''}); break;
     case 'dash-rent': go('leads',{tab:'rent',fStage:'__open',q:'',fLoc:'',fSource:'',fAgent:''}); break;
     case 'dash-sell': go('leads',{tab:'sell',fStage:'__open',q:'',fLoc:'',fSource:'',fAgent:''}); break;
+    case 'dash-rentout': go('leads',{tab:'rentout',fStage:'__open',q:'',fLoc:'',fSource:'',fAgent:''}); break;
     case 'dash-today': go('followups',{fuFilter:'today'}); break;
     case 'dash-over': go('followups',{fuFilter:'overdue'}); break;
     case 'dash-visits': go('followups',{fuFilter:'visits'}); break;
