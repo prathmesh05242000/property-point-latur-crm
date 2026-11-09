@@ -328,13 +328,28 @@ form:not([data-type="sell"]) .sell-only,form:not([data-type="rentout"]) .ro-only
   main.has-mact{padding-bottom:190px}
   .track{grid-template-columns:repeat(4,1fr);row-gap:12px}
   dl.facts{grid-template-columns:120px 1fr}
-  #modal{padding:0;align-items:stretch}
+  #modal{padding:0;align-items:flex-start;background:var(--surface)}
   .sheet{border-radius:0;min-height:100%;max-width:none;padding:18px 16px calc(18px + env(safe-area-inset-bottom,0px));padding-top:calc(16px + env(safe-area-inset-top,0px))}
   .sheet-foot{position:sticky;bottom:0;background:var(--surface);padding:10px 0;margin-bottom:-10px}
   .sheet-foot .btn{flex:1}
   .row3{grid-template-columns:1fr 1fr}
   .fu .time{width:auto}
   .pipe-row{grid-template-columns:130px 1fr 28px;font-size:14px}
+  /* phone polish */
+  input,select,textarea{font-size:16px}
+  .topbar select{font-size:16px}
+  .tabs{flex-wrap:wrap;gap:6px;border-bottom:0;overflow:visible}
+  .tabs button{border:1px solid var(--line);border-radius:20px;padding:6px 12px;margin:0;font-size:15px;background:var(--surface)}
+  .tabs button[aria-selected="true"]{background:var(--teal-soft);border-color:var(--teal);color:var(--teal)}
+  .typepick label,.locs label{position:relative}
+  .typepick input,.locs input{left:0;top:0;width:1px;height:1px}
+}
+@media (max-width:380px){
+  .topbar{padding:8px 10px;gap:6px}
+  .topbar .mark img{width:108px}
+  .topbar select{max-width:120px}
+  .kpi .n{font-size:26px}
+  .row3{grid-template-columns:1fr}
 }
 @media (max-width:420px){.row{grid-template-columns:1fr}.row.keep{grid-template-columns:1fr 1fr}}
 </style>
