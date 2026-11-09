@@ -15,6 +15,7 @@
   --mint:#06D9A6; --emerald:#15C39A; --sage:#63A696;
   --teal:#0A7F62; --teal-hover:#086B52; --teal-soft:#DCF6EE; --teal-deep:#0F3D35; --on-teal:#FFFFFF;
   --rent:#594594; --rent-soft:#ECE7F7;
+  --sell:#1D5FA6; --sell-soft:#E2EDF9;
   --hot:#B5381F; --hot-soft:#FBE7E2; --warm:#9E5E06; --warm-soft:#FAEFDB; --cold:#3D6080; --cold-soft:#E4ECF4;
   --won:#1C6E44; --won-soft:#E0F1E6; --lost:#6B6B6B; --lost-soft:#EEEEEE;
   --mark:#06D9A6; --focus:#0A9C78; --scrim:rgba(8,30,30,.45);
@@ -30,6 +31,7 @@
     --mint:#06D9A6; --emerald:#15C39A; --sage:#7DBBAB; --focus:#06D9A6;
     --teal:#2FD4A8; --teal-hover:#5BE0BD; --teal-soft:#133A31; --teal-deep:#0A2A23; --on-teal:#04221A;
     --rent:#B3A3E8; --rent-soft:#2A2442;
+    --sell:#8DBBF0; --sell-soft:#1A2B40;
     --hot:#F08A72; --hot-soft:#3D221C; --warm:#E9B65C; --warm-soft:#3A2E17; --cold:#93B6D6; --cold-soft:#1D2C3A;
     --won:#7FD3A2; --won-soft:#173226; --lost:#AAAAAA; --lost-soft:#2A2A2A;
     --scrim:rgba(0,0,0,.6); --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.3);
@@ -41,6 +43,7 @@
   --mint:#06D9A6; --emerald:#15C39A; --sage:#7DBBAB; --focus:#06D9A6;
   --teal:#2FD4A8; --teal-hover:#5BE0BD; --teal-soft:#133A31; --teal-deep:#0A2A23; --on-teal:#04221A;
   --rent:#B3A3E8; --rent-soft:#2A2442;
+  --sell:#8DBBF0; --sell-soft:#1A2B40;
   --hot:#F08A72; --hot-soft:#3D221C; --warm:#E9B65C; --warm-soft:#3A2E17; --cold:#93B6D6; --cold-soft:#1D2C3A;
   --won:#7FD3A2; --won-soft:#173226; --lost:#AAAAAA; --lost-soft:#2A2A2A;
   --scrim:rgba(0,0,0,.6); --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.3);
@@ -104,6 +107,7 @@ h3{font-size:16px;margin:0 0 6px;font-weight:600}
 .badge{display:inline-flex;align-items:center;font-size:13px;font-weight:700;padding:1px 8px;border-radius:6px;line-height:20px;white-space:nowrap}
 .b-buy{background:var(--teal-soft);color:var(--teal)}
 .b-rent{background:var(--rent-soft);color:var(--rent)}
+.b-sell{background:var(--sell-soft);color:var(--sell)}
 .b-hot{background:var(--hot-soft);color:var(--hot)}
 .b-warm{background:var(--warm-soft);color:var(--warm)}
 .b-cold{background:var(--cold-soft);color:var(--cold)}
@@ -115,7 +119,7 @@ h3{font-size:16px;margin:0 0 6px;font-weight:600}
 .due-today{color:var(--warm);font-weight:600}
 
 /* Dashboard */
-.kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:26px}
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-bottom:26px}
 .kpi{all:unset;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px 16px;display:flex;flex-direction:column;gap:2px;border-top:4px solid var(--k,var(--teal))}
 .kpi:hover{box-shadow:var(--shadow)}
 .kpi:focus-visible{outline:3px solid var(--focus)}
@@ -238,13 +242,14 @@ dl.facts dd{margin:0;overflow-wrap:anywhere}
 .f textarea{min-height:80px;resize:vertical}
 .f input:focus,.f select:focus,.f textarea:focus,.filters input:focus,.filters select:focus{outline:2px solid var(--teal);outline-offset:0;border-color:var(--teal)}
 .phone{display:grid;grid-template-columns:78px 1fr;gap:6px}
-.typepick{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.typepick{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 .typepick label{cursor:pointer;border:2px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
 .typepick label b{font-size:18px}
 .typepick label span{color:var(--muted);font-size:14px}
 .typepick input{position:absolute;opacity:0}
 .typepick label:has(input:checked){border-color:var(--teal);background:var(--teal-soft)}
 .typepick label.rentpick:has(input:checked){border-color:var(--rent);background:var(--rent-soft)}
+.typepick label.sellpick:has(input:checked){border-color:var(--sell);background:var(--sell-soft)}
 .typepick label:has(input:focus-visible){outline:3px solid var(--focus)}
 .locs{display:flex;flex-wrap:wrap;gap:6px}
 .locs label{cursor:pointer;border:1px solid var(--line);border-radius:20px;padding:4px 12px;font-size:15px;display:inline-flex;gap:6px;align-items:center}
@@ -262,6 +267,7 @@ details.more[open] summary::before{content:"− "}
 details.more .form{margin-top:14px}
 .sect{font-weight:700;font-size:15px;color:var(--muted);margin:4px 0 -4px}
 form[data-type="buy"] .rent-only,form[data-type="rent"] .buy-only{display:none}
+form:not([data-type="sell"]) .sell-only,form[data-type="sell"] .buy-only,form[data-type="sell"] .rent-only,form[data-type="sell"] .not-sell{display:none}
 .sheet-foot{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap}
 .dup{background:var(--warm-soft);border:1px solid color-mix(in srgb,var(--warm) 40%,transparent);border-radius:10px;padding:12px 14px}
 .dup ul{margin:6px 0 10px;padding-left:18px}
@@ -360,6 +366,7 @@ const BASE_LOCS=['Ausa Road','Old Ausa Road','Barshi Road','Ambajogai Road'];
 const SOURCES=['Phone Call','WhatsApp','Website','Google Business Profile','Instagram','Facebook','Referral','Walk-in','Other'];
 const PRIORITIES=['Hot','Warm','Cold'];
 const FINANCE=['Cash','Home loan','Not decided'];
+const NEGOTIABLE=['Yes','Slightly','No (fixed price)'];
 const TIMELINES=['Immediately','Within 1 month','1–3 months','3–6 months','6+ months','Not decided'];
 const FURNISH=['Unfurnished','Semi-furnished','Fully furnished','Any'];
 const OUTCOMES=['Connected','Interested','Call back later','No answer','Busy / switched off','Not interested','Wrong number'];
@@ -391,7 +398,8 @@ function rangeText(min,max,suffix=''){
   if(a) return `From ${a}${suffix}`;
   return '';
 }
-function budgetText(l){return l.type==='buy'?rangeText(l.budgetMin,l.budgetMax):rangeText(l.rentMin,l.rentMax,'/month')}
+function budgetText(l){return l.type==='buy'?rangeText(l.budgetMin,l.budgetMax):l.type==='sell'?(fmtINR(l.askingPrice)?'Asking '+fmtINR(l.askingPrice):''):rangeText(l.rentMin,l.rentMax,'/month')}
+function typeLabel(t){return t==='buy'?'Buy':t==='sell'?'Sell':'Rent'}
 function normPhone(cc,num){
   let raw=String(num||'').trim(); if(!raw) return '';
   let c=String(cc||'+91').replace(/\D/g,'')||'91';
@@ -646,7 +654,7 @@ function go(view,extra={}){ Object.assign(S,{view},extra); render.keepScroll=fal
 
 function vDash(){
   const a=allLeads(), f=followUps(), v=upcomingVisits();
-  const ob=a.filter(l=>l.type==='buy'&&isOpen(l)).length, orr=a.filter(l=>l.type==='rent'&&isOpen(l)).length;
+  const ob=a.filter(l=>l.type==='buy'&&isOpen(l)).length, orr=a.filter(l=>l.type==='rent'&&isOpen(l)).length, os=a.filter(l=>l.type==='sell'&&isOpen(l)).length;
   const k=(n,l,act,c)=>`<button class="kpi" style="--k:${c}" data-act="${act}"><span class="n">${n}</span><span class="l">${l}</span></button>`;
   const counts=STAGES.map(s=>[s,a.filter(l=>l.stage===s).length]); const mx=Math.max(1,...counts.map(c=>c[1]));
   const attn=[...f.overdue,...f.today].slice(0,6);
@@ -657,6 +665,7 @@ function vDash(){
   <div class="kpis">
     ${k(ob,'Open buyer leads','dash-buy','var(--emerald)')}
     ${k(orr,'Open rental leads','dash-rent','var(--rent)')}
+    ${k(os,'Open seller leads','dash-sell','var(--sell)')}
     ${k(f.today.length,'Follow-ups due today','dash-today','var(--warm)')}
     ${k(f.overdue.length,'Overdue follow-ups','dash-over','var(--hot)')}
     ${k(v.length,'Upcoming site visits','dash-visits','var(--sage)')}
@@ -670,19 +679,19 @@ function vDash(){
   </div>`;
 }
 
-function leadTypeBadge(l){return l.type==='buy'?'<span class="badge b-buy">Buy</span>':'<span class="badge b-rent">Rent</span>'}
+function leadTypeBadge(l){return l.type==='buy'?'<span class="badge b-buy">Buy</span>':l.type==='sell'?'<span class="badge b-sell">Sell</span>':'<span class="badge b-rent">Rent</span>'}
 function prioBadge(p){return p?`<span class="badge b-${p.toLowerCase()}">${esc(p)}</span>`:''}
 function stagePill(s){return `<span class="stage ${s==='Closed Won'?'won':s==='Closed Lost'?'lost':''}">${esc(s)}</span>`}
 function propText(l){return [l.bhk&&BHK_TYPES.includes(l.propertyType)?l.bhk:'',l.propertyType].filter(Boolean).join(' ')}
 
 function vLeads(){
-  const all=allLeads(); const c={all:all.length,buy:all.filter(l=>l.type==='buy').length,rent:all.filter(l=>l.type==='rent').length};
+  const all=allLeads(); const c={all:all.length,buy:all.filter(l=>l.type==='buy').length,rent:all.filter(l=>l.type==='rent').length,sell:all.filter(l=>l.type==='sell').length};
   const rows=filtered();
   const tab=(k,l)=>`<button role="tab" aria-selected="${S.tab===k}" data-act="tab" data-tab="${k}">${l}<span class="c">${c[k]}</span></button>`;
   const chips=[]; if(S.fStage==='__open') chips.push(['fStage','Open leads only']);
-  return `<div class="page-head"><div class="grow"><h1>Leads</h1><p>Buyers and tenants from first call to closure.</p></div>
+  return `<div class="page-head"><div class="grow"><h1>Leads</h1><p>Buyers, tenants and sellers from first call to closure.</p></div>
     ${S.me.canWrite?`<button class="btn primary big add-desk" data-act="add">${ICON.plus}Add lead</button>`:''}</div>
-  <div class="tabs" role="tablist">${tab('all','All Leads')}${tab('buy','Buy Property')}${tab('rent','Rent Property')}</div>
+  <div class="tabs" role="tablist">${tab('all','All Leads')}${tab('buy','Buy Property')}${tab('rent','Rent Property')}${tab('sell','Sell Property')}</div>
   <div class="filters">
     <input type="search" id="q" placeholder="Search name or phone" value="${esc(S.q)}" data-act="q" aria-label="Search name or phone">
     <select id="fStage" data-act="filt" data-f="fStage" aria-label="Stage"><option value="">All stages</option><option value="__open"${S.fStage==='__open'?' selected':''}>Open (not closed)</option>${opts(STAGES,S.fStage)}</select>
@@ -691,7 +700,7 @@ function vLeads(){
     ${isAdmin()?`<select id="fAgent" data-act="filt" data-f="fAgent" aria-label="Agent"><option value="">All agents</option>${assignable().map(a=>`<option value="${esc(a.id)}"${a.id===S.fAgent?' selected':''}>${esc(a.name)}</option>`).join('')}</select>`:''}
   </div>
   ${(S.q||S.fStage||S.fLoc||S.fSource||S.fAgent)?`<div style="margin:-4px 0 12px" class="small muted">${rows.length} match${rows.length===1?'':'es'} · <button class="btn sm ghost" data-act="clear-filters">Clear filters</button></div>`:''}
-  ${rows.length?`<div class="table-wrap"><table><thead><tr><th>Name</th><th>Phone</th><th>Type</th><th>Property</th><th>Locality</th><th>Budget</th><th>Stage</th>${isAdmin()?'<th>Agent</th>':''}<th>Next follow-up</th></tr></thead><tbody>
+  ${rows.length?`<div class="table-wrap"><table><thead><tr><th>Name</th><th>Phone</th><th>Type</th><th>Property</th><th>Locality</th><th>Budget / Price</th><th>Stage</th>${isAdmin()?'<th>Agent</th>':''}<th>Next follow-up</th></tr></thead><tbody>
     ${rows.map(l=>`<tr data-act="open" data-key="${esc(keyOf(l))}" tabindex="0"><td><div class="nm">${esc(l.name)}</div>${l.priority?`<div class="sub">${esc(l.priority)}</div>`:''}</td><td class="num">${esc(fmtPhone(l.phone))}</td><td>${leadTypeBadge(l)}</td><td>${esc(propText(l))||'<span class="muted">—</span>'}</td><td class="loc">${esc((l.localities||[]).join(', '))||'<span class="muted">—</span>'}</td><td class="num">${esc(budgetText(l))||'<span class="muted">—</span>'}</td><td>${stagePill(l.stage)}</td>${isAdmin()?`<td>${esc(agentName(l.assignedTo))}</td>`:''}<td class="num ${dueClass(isOpen(l)?l.nextFollowUp:null)}">${isOpen(l)&&l.nextFollowUp?esc(whenText(l.nextFollowUp,{short:1})):'<span class="muted">—</span>'}</td></tr>`).join('')}
   </tbody></table></div>
   <div class="cards">${rows.map(l=>`<button class="lcard" data-act="open" data-key="${esc(keyOf(l))}"><div class="r1"><span class="nm">${esc(l.name)}</span>${leadTypeBadge(l)}${prioBadge(l.priority)}</div>
@@ -703,7 +712,7 @@ function vLeads(){
 function emptyLeads(total){
   if(total) return `<div class="empty panel"><h3>No leads match these filters</h3><button class="btn" data-act="clear-filters">Clear filters</button></div>`;
   if(S.mode==='live'&&!S.loaded) return `<div class="loading">Loading leads…</div>`;
-  return `<div class="empty panel"><h3>No leads yet</h3><p>Add your first enquiry. Only name, mobile and Buy/Rent are needed to save.</p>
+  return `<div class="empty panel"><h3>No leads yet</h3><p>Add your first enquiry. Only name, mobile and Buy/Rent/Sell are needed to save.</p>
     ${S.me.canWrite?`<button class="btn primary" data-act="add">${ICON.plus}Add lead</button>`:''}
     ${S.mode==='live'&&isAdmin()?` <button class="btn" data-act="sample">Add 2 sample leads</button><p class="small">Sample leads are fictional and can be deleted from each lead’s page.</p>`:''}</div>`;
 }
@@ -741,6 +750,7 @@ function vLead(){
   add('Property',esc(propText(l)));
   add('Localities',esc((l.localities||[]).join(', ')));
   if(l.type==='buy'){ add('Budget',esc(budgetText(l))); add('Payment',esc(l.finance)); add('Timeline',esc(l.timeline)); }
+  else if(l.type==='sell'){ add('Asking price',esc(fmtINR(l.askingPrice))); add('Negotiable',esc(l.negotiable)); add('Area',esc(l.area)); add('Address',esc(l.address)); add('Wants to sell',esc(l.timeline)); add('Documents',esc(l.documents)); }
   else { add('Monthly rent',esc(budgetText(l))); add('Deposit budget',esc(fmtINR(l.deposit))); add('Move-in',esc(dateOnly(l.moveIn))); add('Furnishing',esc(l.furnishing)); }
   add('Mobile',`<a href="tel:${esc(l.phone)}">${esc(fmtPhone(l.phone))}</a>`);
   if(l.whatsapp&&l.whatsapp!==l.phone) add('WhatsApp',esc(fmtPhone(l.whatsapp)));
@@ -902,6 +912,7 @@ function leadForm(l){
     <div class="typepick" role="radiogroup" aria-label="Lead type">
       <label><input type="radio" name="type" value="buy"${l.type==='buy'?' checked':''}><b>Buy</b><span>Wants to purchase</span></label>
       <label class="rentpick"><input type="radio" name="type" value="rent"${l.type==='rent'?' checked':''}><b>Rent</b><span>Wants to rent</span></label>
+      <label class="sellpick"><input type="radio" name="type" value="sell"${l.type==='sell'?' checked':''}><b>Sell</b><span>Wants to sell</span></label>
     </div>
     <div class="row">
       <label class="f"><span>Client name <em>*</em></span><input name="name" value="${esc(l.name||'')}" autocomplete="off" ${e?'':'autofocus'} placeholder="Name"></label>
@@ -919,7 +930,7 @@ function leadForm(l){
         <label class="f"><span>Property type</span><select name="propertyType" data-act="ptype">${opts(PTYPES,l.propertyType,'Choose')}</select></label>
         <label class="f bhk-f"><span>BHK</span><select name="bhk">${opts(BHKS,l.bhk,'Choose')}</select></label>
       </div>
-      <div class="f"><span>Preferred localities</span><div class="locs" id="locs">${locs.map(x=>`<label><input type="checkbox" name="loc" value="${esc(x)}"${(l.localities||[]).includes(x)?' checked':''}>${esc(x)}</label>`).join('')}</div>
+      <div class="f"><span><span class="not-sell">Preferred localities</span><span class="sell-only">Property locality</span></span><div class="locs" id="locs">${locs.map(x=>`<label><input type="checkbox" name="loc" value="${esc(x)}"${(l.localities||[]).includes(x)?' checked':''}>${esc(x)}</label>`).join('')}</div>
         <div class="loc-add"><input id="loc-new" placeholder="Other locality" aria-label="Other locality" class="field-in"><button type="button" class="btn" data-act="loc-add">Add</button></div></div>
       <p class="sect buy-only">Purchase</p>
       <div class="row buy-only">${money('budgetMin','Budget from',l.budgetMin,'e.g. 40 lakh')}${money('budgetMax','Budget up to',l.budgetMax,'e.g. 45 lakh')}</div>
@@ -927,6 +938,15 @@ function leadForm(l){
         <label class="f"><span>Payment</span><select name="finance">${opts(FINANCE,l.finance,'Choose')}</select></label>
         <label class="f"><span>Purchase timeline</span><select name="timeline">${opts(TIMELINES,l.timeline,'Choose')}</select></label>
       </div>
+      <p class="sect sell-only">Property for sale</p>
+      <div class="row sell-only">${money('askingPrice','Expected price',l.askingPrice,'e.g. 55 lakh')}
+        <label class="f"><span>Price negotiable?</span><select name="negotiable">${opts(NEGOTIABLE,l.negotiable,'Choose')}</select></label></div>
+      <div class="row sell-only">
+        <label class="f"><span>Area</span><input name="area" value="${esc(l.area||'')}" placeholder="e.g. 1100 sq ft or 2 guntha"></label>
+        <label class="f"><span>When do they want to sell?</span><select name="sellTimeline">${opts(TIMELINES,l.type==='sell'?l.timeline:'','Choose')}</select></label>
+      </div>
+      <label class="f sell-only"><span>Property address</span><input name="address" value="${esc(l.address||'')}" placeholder="Building / plot no., street, landmark"></label>
+      <label class="f sell-only"><span>Documents</span><select name="documents">${opts(['Clear title, all papers ready','Papers pending','Loan on property','Not checked yet'],l.documents,'Choose')}</select></label>
       <p class="sect rent-only">Rental</p>
       <div class="row rent-only">${money('rentMin','Rent from (per month)',l.rentMin,'e.g. 12000')}${money('rentMax','Rent up to (per month)',l.rentMax,'e.g. 15k')}</div>
       <div class="row3 rent-only">${money('deposit','Deposit budget',l.deposit,'e.g. 50000')}
@@ -941,7 +961,7 @@ function leadForm(l){
           :`<div class="f"><span>Assigned agent</span><div style="padding:9px 0">${esc(agentName(l.assignedTo||S.me.id))}</div></div>`}
         ${e?'':dt('nextFollowUp','Next follow-up',l.nextFollowUp?isoToInput(l.nextFollowUp):'')}
       </div>
-      <label class="f"><span>Listing the client asked about</span><input name="listingUrl" type="url" inputmode="url" value="${esc(l.listingUrl||'')}" placeholder="https://www.propertypointlatur.com/…"></label>
+      <label class="f not-sell"><span>Listing the client asked about</span><input name="listingUrl" type="url" inputmode="url" value="${esc(l.listingUrl||'')}" placeholder="https://www.propertypointlatur.com/…"></label>
       <label class="f"><span>Requirement notes</span><textarea name="notes" placeholder="English or मराठी">${esc(l.notes||'')}</textarea></label>
     </div></details>
     ${foot(e?'Save changes':'Save lead')}
@@ -968,11 +988,11 @@ async function submitLead(form,orig,force){
   const type=fd.get('type'), name=String(fd.get('name')||'').trim();
   const phone=normPhone(fd.get('cc'),fd.get('phone'));
   const problems=[];
-  if(!type) problems.push('choose Buy or Rent');
+  if(!type) problems.push('choose Buy, Rent or Sell');
   if(!name) problems.push('enter the client’s name');
   if(!validPhone(phone)) problems.push('enter a valid mobile number (10 digits for India)');
   let wa=phone; if(!fd.get('sameWa')){ const w=String(fd.get('whatsapp')||'').trim(); if(w){ wa=normPhone('+91',w); if(!validPhone(wa)) problems.push('check the WhatsApp number'); } }
-  const money={}; for(const k of ['budgetMin','budgetMax','rentMin','rentMax','deposit']){ const v=parseMoney(fd.get(k)); if(Number.isNaN(v)) problems.push(`check the ${k.startsWith('budget')?'budget':k.startsWith('rent')?'rent':'deposit'} amount`); money[k]=Number.isNaN(v)?null:v; }
+  const money={}; for(const k of ['budgetMin','budgetMax','rentMin','rentMax','deposit','askingPrice']){ const v=parseMoney(fd.get(k)); if(Number.isNaN(v)) problems.push(`check the ${k.startsWith('budget')?'budget':k.startsWith('rent')?'rent':k==='askingPrice'?'expected price':'deposit'} amount`); money[k]=Number.isNaN(v)?null:v; }
   if(type==='buy'&&money.budgetMin&&money.budgetMax&&money.budgetMin>money.budgetMax) problems.push('budget “from” is higher than “up to”');
   if(type==='rent'&&money.rentMin&&money.rentMax&&money.rentMin>money.rentMax) problems.push('rent “from” is higher than “up to”');
   if(problems.length){ err.textContent='To save, '+problems.join('; ')+'.'; err.scrollIntoView({block:'nearest'}); return; }
@@ -982,7 +1002,7 @@ async function submitLead(form,orig,force){
       :allLeads().filter(x=>phones.includes(x.phone)||phones.includes(x.whatsapp)).map(x=>({name:x.name,type:x.type,stage:x.stage,agent:agentName(x.assignedTo),prop:propText(x),key:keyOf(x)}));
     if(d.length){
       form.querySelector('#dup-slot').innerHTML=`<div class="dup" role="alert"><b>Possible duplicate.</b> This number is already on ${d.length===1?'a lead':d.length+' leads'}:
-        <ul>${d.map(x=>`<li>${esc(x.name)} · ${x.type==='buy'?'Buy':'Rent'} · ${esc(x.stage)}${x.prop?' · '+esc(x.prop):''}${x.key?'':` · with ${esc(x.agent||'another agent')}`}</li>`).join('')}</ul>
+        <ul>${d.map(x=>`<li>${esc(x.name)} · ${typeLabel(x.type)} · ${esc(x.stage)}${x.prop?' · '+esc(x.prop):''}${x.key?'':` · with ${esc(x.agent||'another agent')}`}</li>`).join('')}</ul>
         <div class="actions">${d.filter(x=>x.key).slice(0,2).map(x=>`<button type="button" class="btn sm" data-act="dup-open" data-key="${esc(x.key)}">Open ${esc(firstName(x.name))}’s lead</button>`).join('')}<button type="button" class="btn sm primary" data-act="dup-continue">Save as separate requirement</button></div></div>`;
       form.querySelector('#dup-slot').scrollIntoView({block:'nearest'});
       return;
@@ -992,8 +1012,10 @@ async function submitLead(form,orig,force){
   const assignedTo=isAdmin()?(fd.get('assignedTo')||S.me.id):(orig?orig.assignedTo:S.me.id);
   Object.assign(l,{type,name,phone,whatsapp:wa,email:String(fd.get('email')||'').trim(),propertyType:fd.get('propertyType')||'',bhk:BHK_TYPES.includes(fd.get('propertyType'))||!fd.get('propertyType')?(fd.get('bhk')||''):'',
     localities:fd.getAll('loc'),source:fd.get('source')||'',priority:fd.get('priority')||'',listingUrl:String(fd.get('listingUrl')||'').trim(),notes:String(fd.get('notes')||'').trim()});
-  if(type==='buy'){ Object.assign(l,{budgetMin:money.budgetMin,budgetMax:money.budgetMax,finance:fd.get('finance')||'',timeline:fd.get('timeline')||''}); for(const k of ['rentMin','rentMax','deposit','moveIn','furnishing']) delete l[k]; }
-  else { Object.assign(l,{rentMin:money.rentMin,rentMax:money.rentMax,deposit:money.deposit,moveIn:fd.get('moveIn')||'',furnishing:fd.get('furnishing')||''}); for(const k of ['budgetMin','budgetMax','finance','timeline']) delete l[k]; }
+  const SELL_KEYS=['askingPrice','negotiable','area','address','documents'];
+  if(type==='buy'){ Object.assign(l,{budgetMin:money.budgetMin,budgetMax:money.budgetMax,finance:fd.get('finance')||'',timeline:fd.get('timeline')||''}); for(const k of ['rentMin','rentMax','deposit','moveIn','furnishing',...SELL_KEYS]) delete l[k]; }
+  else if(type==='sell'){ Object.assign(l,{askingPrice:money.askingPrice,negotiable:fd.get('negotiable')||'',area:String(fd.get('area')||'').trim(),address:String(fd.get('address')||'').trim(),documents:fd.get('documents')||'',timeline:fd.get('sellTimeline')||''}); l.listingUrl=''; for(const k of ['budgetMin','budgetMax','finance','rentMin','rentMax','deposit','moveIn','furnishing']) delete l[k]; }
+  else { Object.assign(l,{rentMin:money.rentMin,rentMax:money.rentMax,deposit:money.deposit,moveIn:fd.get('moveIn')||'',furnishing:fd.get('furnishing')||''}); for(const k of ['budgetMin','budgetMax','finance','timeline',...SELL_KEYS]) delete l[k]; }
   if(!orig){
     l.assignedTo=assignedTo;
     addAct(l,'created',`Lead added${l.source?' from '+l.source:''}${force?' (same number as an existing lead, separate requirement)':''}`);
@@ -1078,6 +1100,7 @@ function waDraft(l){
   const who=me&&me!=='Admin'?`${me} from Property Point Latur`:'Property Point Latur';
   const prop=[l.bhk,l.propertyType].filter(Boolean).join(' ')||'property';
   const loc=(l.localities||[]).length?` on ${l.localities.join(' / ')}`:'';
+  if(l.type==='sell') return `Namaskar ${firstName(l.name)}, this is ${who}. Thank you for choosing us to sell your ${prop}${loc}. I’d like to visit and take a few photos so we can start showing it to buyers. When is a good time to talk?`;
   return l.type==='rent'
     ?`Namaskar ${firstName(l.name)}, this is ${who}. Thank you for your enquiry for a ${prop} on rent${loc}${l.rentMax?`, around ${fmtINR(l.rentMax)}/month`:''}. I’ll share a few options that match. When is a good time to talk?`
     :`Namaskar ${firstName(l.name)}, this is ${who}. Thank you for your enquiry for a ${prop}${loc}${l.budgetMax?` within ${fmtINR(l.budgetMax)}`:''}. I’ll share a few options that match. When is a good time to talk?`;
@@ -1126,6 +1149,7 @@ document.addEventListener('click',async e=>{
     case 'team-leads': go('leads',{tab:'all',fAgent:t.dataset.id,q:'',fStage:'',fLoc:'',fSource:''}); break;
     case 'dash-buy': go('leads',{tab:'buy',fStage:'__open',q:'',fLoc:'',fSource:'',fAgent:''}); break;
     case 'dash-rent': go('leads',{tab:'rent',fStage:'__open',q:'',fLoc:'',fSource:'',fAgent:''}); break;
+    case 'dash-sell': go('leads',{tab:'sell',fStage:'__open',q:'',fLoc:'',fSource:'',fAgent:''}); break;
     case 'dash-today': go('followups',{fuFilter:'today'}); break;
     case 'dash-over': go('followups',{fuFilter:'overdue'}); break;
     case 'dash-visits': go('followups',{fuFilter:'visits'}); break;
