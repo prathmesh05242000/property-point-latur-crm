@@ -4,6 +4,6 @@
 // The anon key is designed to be public; the database rules protect your data.
 // NEVER put the "service_role" or "secret" key in this file.
 window.PPL_CONFIG = {
-  supabaseUrl: "https://YOUR-PROJECT-ID.supabase.co",
-  supabaseAnonKey: "YOUR-ANON-KEY"
+  supabaseUrl: "https://vbgvpilygzqyugcxnfzi.supabase.co",
+  supabaseAnonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZiZ3ZwaWx5Z3pxeXVnY3huZnppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQyMDc1MjAsImV4cCI6MjEwOTc4MzUyMH0.TTxDd8RvAuNSTeRQ1C_WhwhVFaF56o_UzfkC27V6nCA"
 };
