@@ -1338,7 +1338,7 @@ document.addEventListener('click',async e=>{
     case 'dash-visits': go('followups',{fuFilter:'visits'}); break;
     case 'demo-reset': if(confirm('Reset the demo to the original fictional leads?')){ Demo.reset(); go('dashboard'); toast('Demo data reset'); } break;
     case 'sample': await addSamples(); break;
-    case 'signout': if(Live.sb){ await Live.sb.auth.signOut(); } S.view='dashboard'; break;
+    case 'signout': try{ if(Live.sb) await Live.sb.auth.signOut({ scope: 'local' }); }catch(e){} Object.keys(localStorage).filter(function(k){ return /^sb-.*-auth-token/.test(k); }).forEach(function(k){ localStorage.removeItem(k); }); S.view='dashboard'; location.reload(); break;
     case 'recheck': { const {data}=await Live.sb.auth.getSession(); Live.enter(data.session,true); break; }
     case 'auth-kind': S.authKind=t.dataset.k; render(); break;
     case 'demo-start': Demo.start(); S.view='dashboard'; render(); break;
@@ -1386,28 +1386,40 @@ async function addSamples(){
     if(S.mode==='live') Live.loadLeads(); else render(); },60000);
 })();
 </script>
-<!-- Finance menu link (admins only) -->
+<!-- Admin-only menu items: Finance link + Team (admins only) -->
 <script>
 (function(){
   var ICON = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12"/><path d="M6 8h12"/><path d="M6 13l8.5 8"/><path d="M6 13h3a4 4 0 0 0 0-8"/></svg>';
+  function signedIn(){
+    try { return typeof S !== 'undefined' && S && S.me; } catch(e){ return false; }
+  }
   function isAdmin(){
-    try { return typeof S !== 'undefined' && S && S.me && S.me.role === 'admin'; } catch(e){ return false; }
+    return !!(signedIn() && S.me.role === 'admin');
   }
   function sync(){
+    if (!signedIn()) return;
     var admin = isAdmin();
+    // Agents can't open the Team page
+    if (!admin && S.view === 'team' && typeof go === 'function') { go('dashboard'); return; }
     document.querySelectorAll('nav.nav, nav.tabbar').forEach(function(nav){
-      var have = nav.querySelector('[data-finance]');
-      if (!admin){ if (have) have.remove(); return; }
-      if (have) return;
-      var ref = nav.querySelector('button[data-view="team"]');
-      if (!ref) return;
-      var b = document.createElement('button');
-      b.type = 'button';
-      b.setAttribute('data-finance', '1');
-      b.innerHTML = ICON + '<span>Finance</span>';
-      b.addEventListener('click', function(){ location.href = 'finance.html'; });
-      ref.parentNode.insertBefore(b, ref);
-      if (nav.classList.contains('tabbar')) nav.style.gridTemplateColumns = 'repeat(' + nav.querySelectorAll('button').length + ', minmax(0, 1fr))';
+      var team = nav.querySelector('button[data-view="team"]');
+      var fin = nav.querySelector('[data-finance]');
+      if (!admin){
+        if (team) team.remove();
+        if (fin) fin.remove();
+      } else if (!fin && team){
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.setAttribute('data-finance', '1');
+        b.innerHTML = ICON + '<span>Finance</span>';
+        b.addEventListener('click', function(){ location.href = 'finance.html'; });
+        team.parentNode.insertBefore(b, team);
+      }
+      if (nav.classList.contains('tabbar')){
+        var n = nav.querySelectorAll('button').length;
+        var cols = 'repeat(' + n + ', minmax(0, 1fr))';
+        if (nav.style.gridTemplateColumns !== cols) nav.style.gridTemplateColumns = cols;
+      }
     });
   }
   new MutationObserver(sync).observe(document.body, { childList: true, subtree: true });
