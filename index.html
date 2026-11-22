@@ -1386,5 +1386,26 @@ async function addSamples(){
     if(S.mode==='live') Live.loadLeads(); else render(); },60000);
 })();
 </script>
+<!-- Expenses menu link -->
+<script>
+(function(){
+  var ICON = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12"/><path d="M6 8h12"/><path d="M6 13l8.5 8"/><path d="M6 13h3a4 4 0 0 0 0-8"/></svg>';
+  function addLink(){
+    document.querySelectorAll('nav.nav, nav.tabbar').forEach(function(nav){
+      if (nav.querySelector('[data-expenses]')) return;
+      var ref = nav.querySelector('button[data-view="team"]');
+      if (!ref) return;
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('data-expenses', '1');
+      b.innerHTML = ICON + '<span>Expenses</span>';
+      b.addEventListener('click', function(){ location.href = 'expenses.html'; });
+      ref.parentNode.insertBefore(b, ref);
+    });
+  }
+  new MutationObserver(addLink).observe(document.body, { childList: true, subtree: true });
+  addLink();
+})();
+</script>
 </body>
 </html>
