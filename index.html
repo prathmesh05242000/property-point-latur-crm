@@ -1202,7 +1202,7 @@ async function submitLead(form,orig,force){
     addAct(l,'created',`Lead added${l.source?' from '+l.source:''}${force?' (same number as an existing lead, separate requirement)':''}`);
     const nf=inputToISO(fd.get('nextFollowUp')); if(nf){ l.nextFollowUp=nf; l.followUpNote='First follow-up'; addAct(l,'followup_set',`Follow-up scheduled for ${whenText(nf)}`); }
     if(assignedTo!==S.me.id) addAct(l,'assigned',`Assigned to ${agentName(assignedTo)}`);
-    closeModal(); const ok=await persist(l); if(ok){ toast('Lead saved'); go('lead',{leadKey:keyOf(l)}); }
+    closeModal(); const ok=await persist(l); if(ok){ toast('Lead saved'); go('lead',{leadKey:keyOf(l)}); if(waDigits(l.whatsapp||l.phone).length>=10) mWA(S.leads.get(keyOf(l))||l,{welcome:true}); }
   } else {
     addAct(l,'edited','Lead details updated');
     closeModal();
@@ -1287,14 +1287,14 @@ function waDraft(l){
     ?`Namaskar ${firstName(l.name)}, this is ${who}. Thank you for your enquiry for a ${prop} on rent${loc}${l.rentMax?`, around ${fmtINR(l.rentMax)}/month`:''}. I’ll share a few options that match. When is a good time to talk?`
     :`Namaskar ${firstName(l.name)}, this is ${who}. Thank you for your enquiry for a ${prop}${loc}${l.budgetMax?` within ${fmtINR(l.budgetMax)}`:''}. I’ll share a few options that match. When is a good time to talk?`;
 }
-function mWA(l){
+function mWA(l,o={}){
   const num=waDigits(l.whatsapp||l.phone);
-  openModal(`${head('WhatsApp message')}<form class="form"><p class="muted" style="margin:0">To ${esc(l.name)} · ${esc(fmtPhone(l.whatsapp||l.phone))}</p>
+  openModal(`${head(o.welcome?'Send welcome message':'WhatsApp message')}<form class="form"><p class="muted" style="margin:0">To ${esc(l.name)} · ${esc(fmtPhone(l.whatsapp||l.phone))}${o.welcome?'<br>Tap <b>Send on WhatsApp</b>, then press Send in WhatsApp (use the 86691 53751 account).':''}</p>
     <label class="f"><span>Message (edit before sending)</span><textarea name="msg" id="wa-msg" rows="6">${esc(waDraft(l))}</textarea></label>
     <label class="check"><input type="checkbox" name="log" checked> Add this message to the activity log</label>
-    <div class="sheet-foot"><button type="button" class="btn" data-act="close-modal">Cancel</button><a class="btn primary" id="wa-go" target="_blank" rel="noopener" href="#">${ICON.wa}Open WhatsApp</a></div></form>`,
+    <div class="sheet-foot"><button type="button" class="btn" data-act="close-modal">${o.welcome?'Skip':'Cancel'}</button><a class="btn primary" id="wa-go" target="_blank" rel="noopener" href="#">${ICON.wa}${o.welcome?'Send on WhatsApp':'Open WhatsApp'}</a></div></form>`,
   {onMount:m=>{ const ta=m.querySelector('#wa-msg'), a=m.querySelector('#wa-go'); const upd=()=>{ a.href=`https://wa.me/${num}?text=${encodeURIComponent(ta.value)}`; }; ta.addEventListener('input',upd); upd();
-    a.addEventListener('click',async()=>{ const log=m.querySelector('[name=log]').checked; const txt=ta.value.trim(); closeModal(); if(log&&S.me.canWrite&&txt){ const c=clone(l); addAct(c,'note',`WhatsApp opened with message:\n${txt}`); await persist(c);} }); }});
+    a.addEventListener('click',async()=>{ const log=m.querySelector('[name=log]').checked; const txt=ta.value.trim(); closeModal(); if(log&&S.me.canWrite&&txt){ const c=clone(l); addAct(c,'note',`${o.welcome?'Welcome message':'WhatsApp'} opened with message:\n${txt}`); await persist(c);} }); }});
 }
 function mReassign(l){
   openModal(`${head('Reassign lead')}<form class="form"><p class="muted" style="margin:0">${esc(l.name)} · now with ${esc(agentName(l.assignedTo))}</p>
