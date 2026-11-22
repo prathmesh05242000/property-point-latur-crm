@@ -1278,7 +1278,7 @@ function mStage(l,stage){
 }
 function waDraft(l){
   const me=S.mode==='demo'?agentName(S.me.id).replace(/ \(.*\)/,''):(S.me.name||'');
-  const who=me&&me!=='Admin'?`${me} from Property Point Latur`:'Property Point Latur';
+  const who=me&&me!=='Admin'&&!/property point/i.test(me)?`${me} from Property Point Latur`:'Property Point Latur';
   const prop=[l.bhk,l.propertyType].filter(Boolean).join(' ')||'property';
   const loc=(l.localities||[]).length?` on ${l.localities.join(' / ')}`:'';
   if(l.type==='rentout') return `Namaskar ${firstName(l.name)}, this is ${who}. Thank you for choosing us to find a tenant for your ${prop}${loc}. I’d like to visit and take a few photos so we can start showing it. When is a good time to talk?`;
