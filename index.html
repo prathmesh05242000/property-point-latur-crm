@@ -1407,6 +1407,7 @@ async function addSamples(){
       b.innerHTML = ICON + '<span>Finance</span>';
       b.addEventListener('click', function(){ location.href = 'finance.html'; });
       ref.parentNode.insertBefore(b, ref);
+      if (nav.classList.contains('tabbar')) nav.style.gridTemplateColumns = 'repeat(' + nav.querySelectorAll('button').length + ', minmax(0, 1fr))';
     });
   }
   new MutationObserver(sync).observe(document.body, { childList: true, subtree: true });
