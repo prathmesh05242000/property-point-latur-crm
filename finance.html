@@ -130,6 +130,50 @@ td.pos{color:var(--won)} td.neg{color:var(--hot)}
 .toast.show{opacity:1}
 .loading{padding:60px;text-align:center;color:var(--muted)}
 [hidden]{display:none!important}
+.tabs{scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+
+/* ---------- Phone layout ---------- */
+@media (max-width:600px){
+  .top{padding:10px 14px;padding-top:calc(10px + env(safe-area-inset-top,0px))}
+  .top .brand{font-size:14px}
+  .top .brand .long{display:none}
+  .wrap{padding:14px 14px 40px}
+  h1{font-size:24px}
+  .head{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;margin-bottom:12px}
+  .head .grow{grid-column:1 / -1;min-width:0}
+  .head .sub{font-size:14px}
+  select.period{width:100%;min-width:0}
+  .head .btn.primary{white-space:nowrap}
+  .seg{display:flex;width:100%;margin-bottom:14px}
+  .seg button{flex:1;padding:8px 6px}
+  .kpis{grid-template-columns:1fr 1fr;gap:10px}
+  .kpi{padding:12px 14px}
+  .kpi.net{grid-column:1 / -1}
+  .kpi .v{font-size:22px}
+  .kpi.net .v{font-size:26px}
+  .kpi .s{font-size:12px}
+  .cols{gap:10px}
+  .tabs,.tabs.t4{margin-left:-14px;margin-right:-14px;padding:0 14px 2px;gap:8px}
+  .tab{flex:0 0 150px;padding:10px 12px}
+  .tab .amt{font-size:19px}
+  .bar{display:grid;grid-template-columns:1fr;gap:6px}
+  .bar select{width:100%}
+  .bar .info{margin-left:0}
+  .sum{padding:12px 14px;gap:6px}
+  .sum .chip{font-size:13px}
+  .card:not(.list) th,.card:not(.list) td{padding:10px 12px}
+  .foot{padding:12px 14px;font-size:15px;flex-wrap:wrap;gap:4px}
+  .scrim{align-items:flex-end;padding:0}
+  .modal{max-width:none;border-radius:20px 20px 0 0;max-height:94vh;padding-bottom:env(safe-area-inset-bottom,0px)}
+  .modal form{padding:6px 16px 18px}
+  .modal header{padding:16px 16px 4px}
+  .actions .btn{flex:1;justify-content:center}
+  .actions span{display:none}
+  .actions{flex-wrap:wrap}
+  .actions #fDel{flex-basis:100%;order:3}
+}
+@media (max-width:360px){ .two{grid-template-columns:1fr} }
 </style>
 </head>
 <body>
@@ -138,7 +182,7 @@ td.pos{color:var(--won)} td.neg{color:var(--hot)}
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
     Back to CRM
   </a>
-  <span class="brand">Property Point Latur · Finance</span>
+  <span class="brand"><span class="long">Property Point Latur · </span>Finance</span>
 </div>
 
 <main class="wrap" id="app"><div class="loading">Loading…</div></main>
