@@ -241,7 +241,7 @@ td.pos{color:var(--won)} td.neg{color:var(--hot)}
   function toast(msg){ var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(function(){t.classList.remove('show');},2200); }
   function byDateDesc(a,b){ return b.d.localeCompare(a.d) || String(b.created_at).localeCompare(String(a.created_at)); }
   function avatar(x){ return '<span class="av" style="background:'+x.bg+';color:'+x.fg+'">'+x.short+'</span>'; }
-  function entries(n,w){ return n+' '+(n===1?w:w+'s'); }
+  function entries(n){ return n+' '+(n===1?'entry':'entries'); }
 
   // ---------- render ----------
   function render(){
