@@ -39,8 +39,16 @@ h2.sec{font-size:17px;margin:22px 0 10px}
 .btn.danger{color:var(--hot);border-color:#EFC7BD}
 .btn.sm{padding:5px 12px;min-height:34px;font-size:14px}
 .btn:focus-visible,.tab:focus-visible,.seg button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #0A9C78;outline-offset:2px}
-select.period{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 10px;min-height:42px;font-weight:600}
 
+.pbox{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pseg{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:3px;gap:3px}
+.pseg button{border:0;background:none;border-radius:9px;padding:7px 14px;font-weight:600;cursor:pointer;color:var(--muted);min-height:34px}
+.pseg button[aria-selected="true"]{background:var(--teal);color:#fff}
+.pstep{display:inline-flex;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;min-height:42px}
+.pnav{border:0;background:none;font-size:22px;line-height:1;width:38px;height:40px;cursor:pointer;color:var(--ink);border-radius:12px}
+.pnav:hover:not(:disabled){background:var(--surface-2)}
+.pnav:disabled{opacity:.3;cursor:default}
+.plabel{font-weight:600;min-width:130px;text-align:center;font-variant-numeric:tabular-nums}
 .seg{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px;margin-bottom:16px}
 .seg button{border:0;background:none;border-radius:9px;padding:7px 18px;font-weight:600;cursor:pointer;color:var(--muted)}
 .seg button[aria-selected="true"]{background:var(--teal);color:#fff}
@@ -141,10 +149,12 @@ td.pos{color:var(--won)} td.neg{color:var(--hot)}
   .wrap{padding:14px 14px 40px}
   h1{font-size:24px}
   .head{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;margin-bottom:12px}
-  .head .grow{grid-column:1 / -1;min-width:0}
+  .head .grow{grid-column:1;grid-row:1;min-width:0}
   .head .sub{font-size:14px}
-  select.period{width:100%;min-width:0}
-  .head .btn.primary{white-space:nowrap}
+  .pbox{grid-column:1 / -1;grid-row:2;justify-content:space-between}
+  .pstep{flex:1;justify-content:space-between}
+  .plabel{min-width:0}
+  .head .btn.primary{white-space:nowrap;grid-column:2;grid-row:1}
   .seg{display:flex;width:100%;margin-bottom:14px}
   .seg button{flex:1;padding:8px 6px}
   .kpis{grid-template-columns:1fr 1fr;gap:10px}
@@ -277,7 +287,7 @@ td.pos{color:var(--won)} td.neg{color:var(--hot)}
   function periodLabel(){
     if(period==='all') return 'All time';
     if(period.indexOf('m:')===0) return monthLabel(period.slice(2));
-    return fyLabel(Number(period.slice(3)));
+    return fyLabel(Number(period.slice(3)))+' (Apr–Mar)';
   }
   function acc(k){ for(var i=0;i<ACCOUNTS.length;i++) if(ACCOUNTS[i].key===k) return ACCOUNTS[i]; return ACCOUNTS[4]; }
   function accLabel(a){ return a.label || a.key; }
@@ -298,10 +308,20 @@ td.pos{color:var(--won)} td.neg{color:var(--hot)}
 
     var h = '';
     h += '<div class="head"><div class="grow"><h1>Finance</h1><p class="sub">Company income, expenses and profit · admin only</p></div>';
-    h += '<select class="period" id="period" aria-label="Period">';
-    h += '<optgroup label="Month">'+months.map(function(m){ return '<option value="m:'+m+'"'+(period==='m:'+m?' selected':'')+'>'+monthLabel(m)+'</option>'; }).join('')+'</optgroup>';
-    h += '<optgroup label="Financial year">'+fys.map(function(y){ return '<option value="fy:'+y+'"'+(period==='fy:'+y?' selected':'')+'>'+fyLabel(y)+' (Apr–Mar)</option>'; }).join('')+'</optgroup>';
-    h += '<option value="all"'+(period==='all'?' selected':'')+'>All time</option></select>';
+    var mode = period==='all' ? 'all' : period.slice(0, period.indexOf(':'));
+    h += '<div class="pbox">';
+    h += '<div class="pseg" role="tablist" aria-label="Period">';
+    [['m','Month'],['fy','Year'],['all','All']].forEach(function(o){
+      h += '<button role="tab" data-pmode="'+o[0]+'" aria-selected="'+(mode===o[0])+'">'+o[1]+'</button>';
+    });
+    h += '</div>';
+    if(mode!=='all'){
+      var atNow = mode==='m' ? period.slice(2)>=thisMonth() : Number(period.slice(3))>=fyOf(today());
+      h += '<div class="pstep"><button class="pnav" data-pstep="-1" aria-label="Previous">‹</button>';
+      h += '<span class="plabel">'+esc(periodLabel())+'</span>';
+      h += '<button class="pnav" data-pstep="1" aria-label="Next"'+(atNow?' disabled':'')+'>›</button></div>';
+    }
+    h += '</div>';
     h += '<button class="btn primary" id="addBtn">+ Add '+(view==='expenses'?'expense':'income')+'</button></div>';
 
     h += '<div class="seg" role="tablist">';
@@ -405,6 +425,11 @@ td.pos{color:var(--won)} td.neg{color:var(--hot)}
   app.addEventListener('click', function(e){
     var t;
     if((t=e.target.closest('[data-view]'))){ view=t.dataset.view; history.replaceState(null,'','#'+view); render(); return; }
+    if((t=e.target.closest('[data-pmode]'))){ var md=t.dataset.pmode; period = md==='all'?'all':md==='m'?'m:'+thisMonth():'fy:'+fyOf(today()); render(); return; }
+    if((t=e.target.closest('[data-pstep]'))){ var st=Number(t.dataset.pstep);
+      if(period.indexOf('m:')===0){ var q=period.slice(2).split('-').map(Number); var dd=new Date(q[0],q[1]-1+st,1); period='m:'+dd.getFullYear()+'-'+pad(dd.getMonth()+1); }
+      else if(period.indexOf('fy:')===0){ period='fy:'+(Number(period.slice(3))+st); }
+      render(); return; }
     if((t=e.target.closest('[data-acc]'))){ expAcc=t.dataset.acc; render(); return; }
     if((t=e.target.closest('[data-itype]'))){ incType=t.dataset.itype; render(); return; }
     if((t=e.target.closest('[data-edit-exp]'))){ openForm('expense', find(expenses,t.dataset.editExp)); return; }
@@ -413,7 +438,6 @@ td.pos{color:var(--won)} td.neg{color:var(--hot)}
     if(e.target.closest('#addBtn')){ openForm(view==='expenses'?'expense':'income', null); }
   });
   app.addEventListener('change', function(e){
-    if(e.target.id==='period'){ period=e.target.value; render(); }
     if(e.target.id==='ecat'){ expCat=e.target.value; render(); }
   });
   function find(list,id){ for(var i=0;i<list.length;i++) if(String(list[i].id)===String(id)) return list[i]; return null; }
