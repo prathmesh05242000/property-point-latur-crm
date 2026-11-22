@@ -522,8 +522,8 @@ td .nm{color:var(--ink)}
 document.querySelector('.logo-m').src=document.querySelector('.side .mark img').src;
 /* ---------- Constants ---------- */
 const STAGES=['New','Contacted','Requirement Confirmed','Options Shared','Site Visit Scheduled','Negotiation','Closed Won','Closed Lost'];
-const PTYPES=['Flat','Independent House','Bungalow','Plot','Shop','Office','Other'];
-const BHK_TYPES=['Flat','Independent House','Bungalow'];
+const PTYPES=['1 BHK Flat','2 BHK Flat','3 BHK Flat','4 BHK Flat','Penthouse','Row House','Bungalow/Villa','Residential Houses','Plot/Land','Commercial Plot','Commercial Shop','Commercial Office','Showroom','Warehouse/Godown','Agricultural Land','Industrial Land','Other'];
+const BHK_TYPES=['Penthouse','Row House','Bungalow/Villa','Residential Houses'];
 const BHKS=['1 RK','1 BHK','2 BHK','3 BHK','4 BHK','5+ BHK'];
 const BASE_LOCS=['Ausa Road','Old Ausa Road','Barshi Road','Ambajogai Road'];
 const SOURCES=['Phone Call','WhatsApp','Website','Google Business Profile','Instagram','Facebook','Referral','Walk-in','Other'];
@@ -639,16 +639,16 @@ function seedDemo(){
   const mk=(o)=>{const l={id:uid(),createdAt:ago(o.age||3),updatedAt:ago(o.age2??1),whatsapp:o.phone,email:'',bhk:'',localities:[],source:'Phone Call',priority:'Warm',notes:'',listingUrl:'',nextFollowUp:null,followUpNote:'',visits:[],activities:[],stage:'New',...o}; delete l.age; delete l.age2;
     l.activities.unshift({id:uid(),at:l.createdAt,kind:'created',text:`Lead added from ${l.source}`,by:l.assignedTo}); return l;};
   const L=[
-    mk({name:'Rohan Deshmukh',phone:'+919000010001',type:'buy',propertyType:'Flat',bhk:'2 BHK',localities:['Ausa Road'],source:'Website',priority:'Hot',budgetMin:3800000,budgetMax:4500000,finance:'Home loan',timeline:'1–3 months',stage:'Options Shared',assignedTo:'mahadev',notes:'Wants east-facing flat, 2nd floor or above. Parking needed.',nextFollowUp:at(0,17,30),followUpNote:'Share two more options near Ausa Road',
+    mk({name:'Rohan Deshmukh',phone:'+919000010001',type:'buy',propertyType:'2 BHK Flat',bhk:'',localities:['Ausa Road'],source:'Website',priority:'Hot',budgetMin:3800000,budgetMax:4500000,finance:'Home loan',timeline:'1–3 months',stage:'Options Shared',assignedTo:'mahadev',notes:'Wants east-facing flat, 2nd floor or above. Parking needed.',nextFollowUp:at(0,17,30),followUpNote:'Share two more options near Ausa Road',
       activities:[{id:uid(),at:ago(2),kind:'call',text:'Discussed requirement, loan pre-approved with SBI.',outcome:'Interested',by:'mahadev'},{id:uid(),at:ago(1),kind:'stage',text:'Stage changed to Options Shared',by:'mahadev'}]}),
-    mk({name:'Sneha Kulkarni',phone:'+919000010002',type:'rent',propertyType:'Flat',bhk:'2 BHK',localities:['Barshi Road'],source:'Instagram',priority:'Warm',rentMin:12000,rentMax:15000,deposit:50000,moveIn:dayKey(n+20*DAY),furnishing:'Semi-furnished',stage:'Contacted',assignedTo:'prathmesh',nextFollowUp:at(-1,11),followUpNote:'Confirm move-in date'}),
-    mk({name:'Amol Jadhav',phone:'+919000010003',type:'buy',propertyType:'Plot',localities:['Ambajogai Road'],source:'Referral',priority:'Warm',budgetMin:2000000,budgetMax:2500000,finance:'Cash',timeline:'3–6 months',stage:'Requirement Confirmed',assignedTo:'admin',nextFollowUp:at(2,12),followUpNote:'Send plot layout PDF'}),
-    mk({name:'प्रिया पाटील',phone:'+919000010004',type:'rent',propertyType:'Flat',bhk:'1 BHK',localities:['Old Ausa Road'],source:'WhatsApp',priority:'Cold',rentMin:8000,rentMax:10000,deposit:30000,furnishing:'Any',stage:'New',assignedTo:'mahadev',notes:'कॉलेजजवळ हवे, कुटुंबासाठी. Call after 6 pm.',age:0,age2:0}),
-    mk({name:'Vikas Shinde',phone:'+919000010005',type:'buy',propertyType:'Shop',localities:['Ausa Road'],source:'Google Business Profile',priority:'Hot',budgetMin:6000000,budgetMax:8000000,finance:'Home loan',timeline:'Within 1 month',stage:'Site Visit Scheduled',assignedTo:'prathmesh',
+    mk({name:'Sneha Kulkarni',phone:'+919000010002',type:'rent',propertyType:'2 BHK Flat',bhk:'',localities:['Barshi Road'],source:'Instagram',priority:'Warm',rentMin:12000,rentMax:15000,deposit:50000,moveIn:dayKey(n+20*DAY),furnishing:'Semi-furnished',stage:'Contacted',assignedTo:'prathmesh',nextFollowUp:at(-1,11),followUpNote:'Confirm move-in date'}),
+    mk({name:'Amol Jadhav',phone:'+919000010003',type:'buy',propertyType:'Plot/Land',localities:['Ambajogai Road'],source:'Referral',priority:'Warm',budgetMin:2000000,budgetMax:2500000,finance:'Cash',timeline:'3–6 months',stage:'Requirement Confirmed',assignedTo:'admin',nextFollowUp:at(2,12),followUpNote:'Send plot layout PDF'}),
+    mk({name:'प्रिया पाटील',phone:'+919000010004',type:'rent',propertyType:'1 BHK Flat',bhk:'',localities:['Old Ausa Road'],source:'WhatsApp',priority:'Cold',rentMin:8000,rentMax:10000,deposit:30000,furnishing:'Any',stage:'New',assignedTo:'mahadev',notes:'कॉलेजजवळ हवे, कुटुंबासाठी. Call after 6 pm.',age:0,age2:0}),
+    mk({name:'Vikas Shinde',phone:'+919000010005',type:'buy',propertyType:'Commercial Shop',localities:['Ausa Road'],source:'Google Business Profile',priority:'Hot',budgetMin:6000000,budgetMax:8000000,finance:'Home loan',timeline:'Within 1 month',stage:'Site Visit Scheduled',assignedTo:'prathmesh',
       visits:[{id:uid(),at:at(1,11),address:'Ground-floor shop, Ausa Road, near bus stand',link:'',status:'scheduled',note:'Bring brother along'}]}),
-    mk({name:'Meera Joshi',phone:'+919000010006',type:'rent',propertyType:'Office',localities:['Barshi Road'],source:'Walk-in',priority:'Warm',rentMin:25000,rentMax:30000,deposit:150000,furnishing:'Fully furnished',stage:'Negotiation',assignedTo:'admin',nextFollowUp:at(0,19),followUpNote:'Owner’s answer on rent reduction'}),
-    mk({name:'Sachin More',phone:'+919000010007',type:'buy',propertyType:'Independent House',bhk:'3 BHK',localities:['Old Ausa Road'],source:'Facebook',priority:'Hot',budgetMin:5500000,budgetMax:6500000,finance:'Home loan',timeline:'Immediately',stage:'Closed Won',assignedTo:'mahadev',age:20,age2:4}),
-    mk({name:'Kavita Pawar',phone:'+919000010008',type:'rent',propertyType:'Flat',bhk:'2 BHK',localities:['Ambajogai Road'],source:'Phone Call',priority:'Cold',rentMin:9000,rentMax:11000,stage:'Closed Lost',lostReason:'Budget mismatch',assignedTo:'prathmesh',age:12,age2:6})
+    mk({name:'Meera Joshi',phone:'+919000010006',type:'rent',propertyType:'Commercial Office',localities:['Barshi Road'],source:'Walk-in',priority:'Warm',rentMin:25000,rentMax:30000,deposit:150000,furnishing:'Fully furnished',stage:'Negotiation',assignedTo:'admin',nextFollowUp:at(0,19),followUpNote:'Owner’s answer on rent reduction'}),
+    mk({name:'Sachin More',phone:'+919000010007',type:'buy',propertyType:'Residential Houses',bhk:'3 BHK',localities:['Old Ausa Road'],source:'Facebook',priority:'Hot',budgetMin:5500000,budgetMax:6500000,finance:'Home loan',timeline:'Immediately',stage:'Closed Won',assignedTo:'mahadev',age:20,age2:4}),
+    mk({name:'Kavita Pawar',phone:'+919000010008',type:'rent',propertyType:'2 BHK Flat',bhk:'',localities:['Ambajogai Road'],source:'Phone Call',priority:'Cold',rentMin:9000,rentMax:11000,stage:'Closed Lost',lostReason:'Budget mismatch',assignedTo:'prathmesh',age:12,age2:6})
   ];
   return {me:'admin',leads:L};
 }
@@ -1148,7 +1148,7 @@ function wireLeadForm(m,orig){
   const syncType=()=>{ const v=(form.querySelector('[name=type]:checked')||{}).value; form.dataset.type=v||'none'; };
   form.querySelectorAll('[name=type]').forEach(r=>r.addEventListener('change',syncType));
   const pt=form.querySelector('[name=propertyType]'), bf=form.querySelector('.bhk-f');
-  const syncPt=()=>{ bf.hidden=!(BHK_TYPES.includes(pt.value)||!pt.value); }; pt.addEventListener('change',syncPt); syncPt();
+  const syncPt=()=>{ bf.hidden=!BHK_TYPES.includes(pt.value); }; pt.addEventListener('change',syncPt); syncPt();
   form.querySelector('[data-act=same-wa]').addEventListener('change',e=>{ const w=form.querySelector('[name=whatsapp]'); w.hidden=e.target.checked; if(!e.target.checked) w.focus(); });
   form.querySelectorAll('[data-act=money]').forEach(i=>i.addEventListener('input',()=>{ const v=parseMoney(i.value); i.parentElement.querySelector('.mprev').textContent=i.value.trim()?(isNaN(v)?'Use digits, “lakh”, “k” or “cr”':fmtINR(v)):'\u00a0'; }));
   const addLoc=()=>{ const inp=form.querySelector('#loc-new'); const v=inp.value.trim(); if(!v) return;
@@ -1186,7 +1186,7 @@ async function submitLead(form,orig,force){
   }
   const l=orig?clone(orig):{id:uid(),createdAt:nowISO(),stage:'New',activities:[],visits:[],createdBy:S.me.id};
   const assignedTo=isAdmin()?(fd.get('assignedTo')||S.me.id):(orig?orig.assignedTo:S.me.id);
-  Object.assign(l,{type,name,phone,whatsapp:wa,email:String(fd.get('email')||'').trim(),propertyType:fd.get('propertyType')||'',bhk:BHK_TYPES.includes(fd.get('propertyType'))||!fd.get('propertyType')?(fd.get('bhk')||''):'',
+  Object.assign(l,{type,name,phone,whatsapp:wa,email:String(fd.get('email')||'').trim(),propertyType:fd.get('propertyType')||'',bhk:BHK_TYPES.includes(fd.get('propertyType'))?(fd.get('bhk')||''):'',
     localities:fd.getAll('loc'),source:fd.get('source')||'',priority:fd.get('priority')||'',listingUrl:String(fd.get('listingUrl')||'').trim(),notes:String(fd.get('notes')||'').trim()});
   const TYPE_KEYS=['budgetMin','budgetMax','finance','timeline','rentMin','rentMax','deposit','moveIn','furnishing','askingPrice','negotiable','area','address','documents','expectedRent','availableFrom','preferredTenant'];
   const txtf=k=>String(fd.get(k)||'').trim();
@@ -1279,7 +1279,7 @@ function mStage(l,stage){
 function waDraft(l){
   const me=S.mode==='demo'?agentName(S.me.id).replace(/ \(.*\)/,''):(S.me.name||'');
   const who=me&&me!=='Admin'&&!/property point/i.test(me)?`${me} from Property Point Latur`:'Property Point Latur';
-  const prop=[l.bhk,l.propertyType].filter(Boolean).join(' ')||'property';
+  const prop=propText(l)||'property';
   const loc=(l.localities||[]).length?` on ${l.localities.join(' / ')}`:'';
   if(l.type==='rentout') return `Namaskar ${firstName(l.name)}, this is ${who}. Thank you for choosing us to find a tenant for your ${prop}${loc}. I’d like to visit and take a few photos so we can start showing it. When is a good time to talk?`;
   if(l.type==='sell') return `Namaskar ${firstName(l.name)}, this is ${who}. Thank you for choosing us to sell your ${prop}${loc}. I’d like to visit and take a few photos so we can start showing it to buyers. When is a good time to talk?`;
@@ -1369,8 +1369,8 @@ document.addEventListener('submit',async e=>{
 });
 async function addSamples(){
   const mk=(o)=>({id:uid(),createdAt:nowISO(),stage:'New',activities:[],visits:[],createdBy:S.me.id,assignedTo:S.me.id,whatsapp:o.phone,priority:'Warm',source:'Phone Call',...o});
-  const a=mk({name:'Sample — Rohan Deshmukh',phone:'+919000010001',type:'buy',propertyType:'Flat',bhk:'2 BHK',localities:['Ausa Road'],budgetMax:4500000,finance:'Home loan',notes:'Fictional sample lead'});
-  const b=mk({name:'Sample — Sneha Kulkarni',phone:'+919000010002',type:'rent',propertyType:'Flat',bhk:'2 BHK',localities:['Barshi Road'],rentMax:15000,notes:'Fictional sample lead'});
+  const a=mk({name:'Sample — Rohan Deshmukh',phone:'+919000010001',type:'buy',propertyType:'2 BHK Flat',bhk:'',localities:['Ausa Road'],budgetMax:4500000,finance:'Home loan',notes:'Fictional sample lead'});
+  const b=mk({name:'Sample — Sneha Kulkarni',phone:'+919000010002',type:'rent',propertyType:'2 BHK Flat',bhk:'',localities:['Barshi Road'],rentMax:15000,notes:'Fictional sample lead'});
   for(const l of [a,b]){ addAct(l,'created','Sample lead added'); await persist(l); }
   toast('2 sample leads added');
 }
