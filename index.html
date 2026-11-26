@@ -753,7 +753,7 @@ function filtered(){
   const q=S.q.trim().toLowerCase(), qd=q.replace(/\D/g,'');
   if(q) a=a.filter(l=>String(l.name||'').toLowerCase().includes(q)||(qd.length>=3&&(waDigits(l.phone).includes(qd)||waDigits(l.whatsapp).includes(qd))));
   if(S.fStage) a=a.filter(l=>S.fStage==='__open'?isOpen(l):l.stage===S.fStage);
-  if(S.fLoc) a=a.filter(l=>(l.localities||[]).includes(S.fLoc));
+  if(S.fLoc){ const q=S.fLoc.toLowerCase(); a=a.filter(l=>locAll(l).some(x=>x.toLowerCase().includes(q))); }
   if(S.fSource) a=a.filter(l=>l.source===S.fSource);
   if(S.fAgent) a=a.filter(l=>l.assignedTo===S.fAgent);
   return a.sort((x,y)=>String(y.updatedAt).localeCompare(String(x.updatedAt)));
@@ -1073,7 +1073,6 @@ function leadForm(l){
   const cc=l.phone&&!l.phone.startsWith('+91')?'+':'+91';
   const num=l.phone?(l.phone.startsWith('+91')?l.phone.slice(3):l.phone):'';
   const sameWa=!l.whatsapp||l.whatsapp===l.phone;
-  const locs=knownLocs();
   const money=(name,label,val,ph)=>`<label class="f"><span>${label}</span><input name="${name}" inputmode="decimal" value="${val!=null&&val!==''?esc(String(val)):''}" placeholder="${ph}" data-act="money"><small class="mprev">${val?esc(fmtINR(val)):'&nbsp;'}</small></label>`;
   return `${head(e?'Edit lead':'Add lead')}
   <form class="form" novalidate data-type="${esc(l.type||'none')}" id="leadform">
@@ -1099,7 +1098,6 @@ function leadForm(l){
         <label class="f"><span>Property type</span><select name="propertyType" data-act="ptype">${opts(PTYPES,l.propertyType,'Choose')}</select></label>
         <label class="f bhk-f"><span>BHK</span><select name="bhk">${opts(BHKS,l.bhk,'Choose')}</select></label>
       </div>
-      <div class="f"><span><span class="not-owner">Preferred localities</span><span class="owner-only">Property locality</span></span><div class="locs" id="locs">${locs.map(x=>`<label><input type="checkbox" name="loc" value="${esc(x)}"${(l.localities||[]).includes(x)?' checked':''}>${esc(x)}</label>`).join('')}</div></div>
       <label class="f"><span>Enter Location</span><input name="location" value="${esc(l.location||'')}" placeholder="Type location, e.g. Shivaji Nagar, near bus stand"></label>
       <p class="sect buy-only">Purchase</p>
       <div class="row buy-only">${money('budgetMin','Budget from',l.budgetMin,'e.g. 40 lakh')}${money('budgetMax','Budget up to',l.budgetMax,'e.g. 45 lakh')}</div>
@@ -1183,7 +1181,7 @@ async function submitLead(form,orig,force){
   const l=orig?clone(orig):{id:uid(),createdAt:nowISO(),stage:'New',activities:[],visits:[],createdBy:S.me.id};
   const assignedTo=isAdmin()?(fd.get('assignedTo')||S.me.id):(orig?orig.assignedTo:S.me.id);
   Object.assign(l,{type,name,phone,whatsapp:wa,email:String(fd.get('email')||'').trim(),propertyType:fd.get('propertyType')||'',bhk:BHK_TYPES.includes(fd.get('propertyType'))?(fd.get('bhk')||''):'',
-    localities:fd.getAll('loc'),location:String(fd.get('location')||'').trim(),source:fd.get('source')||'',priority:fd.get('priority')||'',listingUrl:String(fd.get('listingUrl')||'').trim(),notes:String(fd.get('notes')||'').trim()});
+    localities:(orig&&orig.localities)||[],location:String(fd.get('location')||'').trim(),source:fd.get('source')||'',priority:fd.get('priority')||'',listingUrl:String(fd.get('listingUrl')||'').trim(),notes:String(fd.get('notes')||'').trim()});
   const TYPE_KEYS=['budgetMin','budgetMax','finance','timeline','rentMin','rentMax','deposit','moveIn','furnishing','askingPrice','negotiable','area','address','documents','expectedRent','availableFrom','preferredTenant'];
   const txtf=k=>String(fd.get(k)||'').trim();
   const vals=type==='buy'?{budgetMin:money.budgetMin,budgetMax:money.budgetMax,finance:fd.get('finance')||'',timeline:fd.get('timeline')||''}
