@@ -1271,15 +1271,16 @@ function mStage(l,stage){
       closeModal(); await persist(c); toast(`Stage: ${st}`); }});
 }
 function waDraft(l){
-  const me=S.mode==='demo'?agentName(S.me.id).replace(/ \(.*\)/,''):(S.me.name||'');
-  const who=me&&me!=='Admin'&&!/property point/i.test(me)?`${me} from Property Point Latur`:'Property Point Latur';
   const prop=propText(l)||'property';
   const loc=locAll(l).length?` on ${locAll(l).join(' / ')}`:'';
-  if(l.type==='rentout') return `Namaskar ${firstName(l.name)}, this is ${who}. Thank you for choosing us to find a tenant for your ${prop}${loc}. I’d like to visit and take a few photos so we can start showing it. When is a good time to talk?`;
-  if(l.type==='sell') return `Namaskar ${firstName(l.name)}, this is ${who}. Thank you for choosing us to sell your ${prop}${loc}. I’d like to visit and take a few photos so we can start showing it to buyers. When is a good time to talk?`;
+  const nm=String(l.name||'').trim();
+  const who=/\b(sir|madam|mam|ma'am)\b|सर|मॅडम|मॅम/i.test(nm)?nm:`${firstName(nm)} Sir`;
+  const hi=`Welcome to Property Point Latur\n\nNamaskar🙏 ${who},`;
+  if(l.type==='rentout') return `${hi} Thank you for choosing us to find a tenant for your ${prop}${loc}. I’d like to visit and take a few photos so we can start showing it. When is a good time to talk?`;
+  if(l.type==='sell') return `${hi} Thank you for choosing us to sell your ${prop}${loc}. I’d like to visit and take a few photos so we can start showing it to buyers. When is a good time to talk?`;
   return l.type==='rent'
-    ?`Namaskar ${firstName(l.name)}, this is ${who}. Thank you for your enquiry for a ${prop} on rent${loc}${l.rentMax?`, around ${fmtINR(l.rentMax)}/month`:''}. I’ll share a few options that match. When is a good time to talk?`
-    :`Namaskar ${firstName(l.name)}, this is ${who}. Thank you for your enquiry for a ${prop}${loc}${l.budgetMax?` within ${fmtINR(l.budgetMax)}`:''}. I’ll share a few options that match. When is a good time to talk?`;
+    ?`${hi} Thank you for your enquiry for a ${prop} on rent${loc}${l.rentMax?`, around ${fmtINR(l.rentMax)}/month`:''}.`
+    :`${hi} Thank you for your enquiry for a ${prop}${loc}${l.budgetMax?` within ${fmtINR(l.budgetMax)}`:''}.`;
 }
 function mWA(l,o={}){
   const num=waDigits(l.whatsapp||l.phone);
