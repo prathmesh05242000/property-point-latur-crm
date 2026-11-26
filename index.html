@@ -627,6 +627,7 @@ const isAdmin=()=>S.me.role==='admin';
 function agentName(id){ if(!id) return 'Unassigned'; const t=S.team.find(m=>m.id===id); return (t&&t.name)||S.names[id]||(id===S.me.id?'You':'Team member'); }
 function assignable(){ const ids=new Set(S.team.filter(m=>m.active!==false).map(m=>m.id)); if(S.me.id) ids.add(S.me.id); return [...ids].map(id=>({id,name:agentName(id)})).sort((a,b)=>a.name.localeCompare(b.name)); }
 function allLeads(){ let a=[...S.leads.values()]; if(S.mode==='demo'&&!isAdmin()) a=a.filter(l=>l.assignedTo===S.me.id); return a; }
+function locAll(l){ return [...(l.localities||[]),l.location].filter(Boolean); }
 function knownLocs(){ const s=new Set(BASE_LOCS); for(const l of S.leads.values()) (l.localities||[]).forEach(x=>s.add(x)); return [...s]; }
 function addAct(l,kind,text,extra={}){ l.activities=l.activities||[]; l.activities.push({id:uid(),at:nowISO(),kind,text,by:S.me.id,...extra}); }
 
@@ -866,10 +867,10 @@ function vLeads(){
   </div>
   ${(S.q||S.fStage||S.fLoc||S.fSource||S.fAgent)?`<div style="margin:-4px 0 12px" class="small muted">${rows.length} match${rows.length===1?'':'es'} · <button class="btn sm ghost" data-act="clear-filters">Clear filters</button></div>`:''}
   ${rows.length?`<div class="table-wrap"><table><thead><tr><th>Name</th><th>Phone</th><th>Type</th><th>Property</th><th>Locality</th><th>Budget / Price</th><th>Stage</th>${isAdmin()?'<th>Agent</th>':''}<th>Next follow-up</th></tr></thead><tbody>
-    ${rows.map(l=>`<tr data-act="open" data-key="${esc(keyOf(l))}" tabindex="0"><td><div class="nm">${esc(l.name)}</div>${l.priority?`<div class="sub">${esc(l.priority)}</div>`:''}</td><td class="num">${esc(fmtPhone(l.phone))}</td><td>${leadTypeBadge(l)}</td><td>${esc(propText(l))||'<span class="muted">—</span>'}</td><td class="loc">${esc((l.localities||[]).join(', '))||'<span class="muted">—</span>'}</td><td class="num">${esc(budgetText(l))||'<span class="muted">—</span>'}</td><td>${stagePill(l.stage)}</td>${isAdmin()?`<td>${esc(agentName(l.assignedTo))}</td>`:''}<td class="num ${dueClass(isOpen(l)?l.nextFollowUp:null)}">${isOpen(l)&&l.nextFollowUp?esc(whenText(l.nextFollowUp,{short:1})):'<span class="muted">—</span>'}</td></tr>`).join('')}
+    ${rows.map(l=>`<tr data-act="open" data-key="${esc(keyOf(l))}" tabindex="0"><td><div class="nm">${esc(l.name)}</div>${l.priority?`<div class="sub">${esc(l.priority)}</div>`:''}</td><td class="num">${esc(fmtPhone(l.phone))}</td><td>${leadTypeBadge(l)}</td><td>${esc(propText(l))||'<span class="muted">—</span>'}</td><td class="loc">${esc(locAll(l).join(', '))||'<span class="muted">—</span>'}</td><td class="num">${esc(budgetText(l))||'<span class="muted">—</span>'}</td><td>${stagePill(l.stage)}</td>${isAdmin()?`<td>${esc(agentName(l.assignedTo))}</td>`:''}<td class="num ${dueClass(isOpen(l)?l.nextFollowUp:null)}">${isOpen(l)&&l.nextFollowUp?esc(whenText(l.nextFollowUp,{short:1})):'<span class="muted">—</span>'}</td></tr>`).join('')}
   </tbody></table></div>
   <div class="cards">${rows.map(l=>`<button class="lcard" data-act="open" data-key="${esc(keyOf(l))}"><div class="r1"><span class="nm">${esc(l.name)}</span>${leadTypeBadge(l)}${prioBadge(l.priority)}</div>
-    <div class="r2">${esc(fmtPhone(l.phone))}${propText(l)?' · '+esc(propText(l)):''}${(l.localities||[]).length?' · '+esc(l.localities.join(', ')):''}</div>
+    <div class="r2">${esc(fmtPhone(l.phone))}${propText(l)?' · '+esc(propText(l)):''}${locAll(l).length?' · '+esc(locAll(l).join(', ')):''}</div>
     <div class="r3">${stagePill(l.stage)}${budgetText(l)?`<span class="num">${esc(budgetText(l))}</span>`:''}${isOpen(l)&&l.nextFollowUp?`<span class="${dueClass(l.nextFollowUp)}">${esc(whenText(l.nextFollowUp,{short:1}))}</span>`:''}${isAdmin()?`<span class="muted">${esc(agentName(l.assignedTo))}</span>`:''}</div></button>`).join('')}</div>`
   : emptyLeads(all.length)}
   ${S.me.canWrite?`<button class="btn primary fab" data-act="add">${ICON.plus}Add lead</button>`:''}`;
@@ -914,6 +915,7 @@ function vLead(){
   const add=(a,b)=>{ if(b) facts.push(`<dt>${a}</dt><dd>${b}</dd>`); };
   add('Property',esc(propText(l)));
   add('Localities',esc((l.localities||[]).join(', ')));
+  add('Location',esc(l.location||''));
   if(l.type==='buy'){ add('Budget',esc(budgetText(l))); add('Payment',esc(l.finance)); add('Timeline',esc(l.timeline)); }
   else if(l.type==='rentout'){ add('Expected rent',esc(budgetText(l))); add('Deposit',esc(fmtINR(l.deposit))); add('Furnishing',esc(l.furnishing)); add('Available from',esc(dateOnly(l.availableFrom))); add('Preferred tenants',esc(l.preferredTenant)); add('Area',esc(l.area)); add('Address',esc(l.address)); }
   else if(l.type==='sell'){ add('Asking price',esc(fmtINR(l.askingPrice))); add('Negotiable',esc(l.negotiable)); add('Area',esc(l.area)); add('Address',esc(l.address)); add('Wants to sell',esc(l.timeline)); add('Documents',esc(l.documents)); }
@@ -1097,8 +1099,8 @@ function leadForm(l){
         <label class="f"><span>Property type</span><select name="propertyType" data-act="ptype">${opts(PTYPES,l.propertyType,'Choose')}</select></label>
         <label class="f bhk-f"><span>BHK</span><select name="bhk">${opts(BHKS,l.bhk,'Choose')}</select></label>
       </div>
-      <div class="f"><span><span class="not-owner">Preferred localities</span><span class="owner-only">Property locality</span></span><div class="locs" id="locs">${locs.map(x=>`<label><input type="checkbox" name="loc" value="${esc(x)}"${(l.localities||[]).includes(x)?' checked':''}>${esc(x)}</label>`).join('')}</div>
-        <div class="loc-add"><input id="loc-new" placeholder="Other locality" aria-label="Other locality" class="field-in"><button type="button" class="btn" data-act="loc-add">Add</button></div></div>
+      <div class="f"><span><span class="not-owner">Preferred localities</span><span class="owner-only">Property locality</span></span><div class="locs" id="locs">${locs.map(x=>`<label><input type="checkbox" name="loc" value="${esc(x)}"${(l.localities||[]).includes(x)?' checked':''}>${esc(x)}</label>`).join('')}</div></div>
+      <label class="f"><span>Enter Location</span><input name="location" value="${esc(l.location||'')}" placeholder="Type location, e.g. Shivaji Nagar, near bus stand"></label>
       <p class="sect buy-only">Purchase</p>
       <div class="row buy-only">${money('budgetMin','Budget from',l.budgetMin,'e.g. 40 lakh')}${money('budgetMax','Budget up to',l.budgetMax,'e.g. 45 lakh')}</div>
       <div class="row buy-only">
@@ -1151,12 +1153,6 @@ function wireLeadForm(m,orig){
   const syncPt=()=>{ bf.hidden=!BHK_TYPES.includes(pt.value); }; pt.addEventListener('change',syncPt); syncPt();
   form.querySelector('[data-act=same-wa]').addEventListener('change',e=>{ const w=form.querySelector('[name=whatsapp]'); w.hidden=e.target.checked; if(!e.target.checked) w.focus(); });
   form.querySelectorAll('[data-act=money]').forEach(i=>i.addEventListener('input',()=>{ const v=parseMoney(i.value); i.parentElement.querySelector('.mprev').textContent=i.value.trim()?(isNaN(v)?'Use digits, “lakh”, “k” or “cr”':fmtINR(v)):'\u00a0'; }));
-  const addLoc=()=>{ const inp=form.querySelector('#loc-new'); const v=inp.value.trim(); if(!v) return;
-    const ex=[...form.querySelectorAll('[name=loc]')].find(c=>c.value.toLowerCase()===v.toLowerCase());
-    if(ex){ ex.checked=true; } else { const lab=document.createElement('label'); lab.innerHTML=`<input type="checkbox" name="loc" value="${esc(v)}" checked>${esc(v)}`; form.querySelector('#locs').appendChild(lab); }
-    inp.value=''; inp.focus(); };
-  form.querySelector('[data-act=loc-add]').addEventListener('click',addLoc);
-  form.querySelector('#loc-new').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); addLoc(); }});
   form.addEventListener('submit',e=>{ e.preventDefault(); submitLead(form,orig,false); });
 }
 async function submitLead(form,orig,force){
@@ -1187,7 +1183,7 @@ async function submitLead(form,orig,force){
   const l=orig?clone(orig):{id:uid(),createdAt:nowISO(),stage:'New',activities:[],visits:[],createdBy:S.me.id};
   const assignedTo=isAdmin()?(fd.get('assignedTo')||S.me.id):(orig?orig.assignedTo:S.me.id);
   Object.assign(l,{type,name,phone,whatsapp:wa,email:String(fd.get('email')||'').trim(),propertyType:fd.get('propertyType')||'',bhk:BHK_TYPES.includes(fd.get('propertyType'))?(fd.get('bhk')||''):'',
-    localities:fd.getAll('loc'),source:fd.get('source')||'',priority:fd.get('priority')||'',listingUrl:String(fd.get('listingUrl')||'').trim(),notes:String(fd.get('notes')||'').trim()});
+    localities:fd.getAll('loc'),location:String(fd.get('location')||'').trim(),source:fd.get('source')||'',priority:fd.get('priority')||'',listingUrl:String(fd.get('listingUrl')||'').trim(),notes:String(fd.get('notes')||'').trim()});
   const TYPE_KEYS=['budgetMin','budgetMax','finance','timeline','rentMin','rentMax','deposit','moveIn','furnishing','askingPrice','negotiable','area','address','documents','expectedRent','availableFrom','preferredTenant'];
   const txtf=k=>String(fd.get(k)||'').trim();
   const vals=type==='buy'?{budgetMin:money.budgetMin,budgetMax:money.budgetMax,finance:fd.get('finance')||'',timeline:fd.get('timeline')||''}
@@ -1280,7 +1276,7 @@ function waDraft(l){
   const me=S.mode==='demo'?agentName(S.me.id).replace(/ \(.*\)/,''):(S.me.name||'');
   const who=me&&me!=='Admin'&&!/property point/i.test(me)?`${me} from Property Point Latur`:'Property Point Latur';
   const prop=propText(l)||'property';
-  const loc=(l.localities||[]).length?` on ${l.localities.join(' / ')}`:'';
+  const loc=locAll(l).length?` on ${locAll(l).join(' / ')}`:'';
   if(l.type==='rentout') return `Namaskar ${firstName(l.name)}, this is ${who}. Thank you for choosing us to find a tenant for your ${prop}${loc}. I’d like to visit and take a few photos so we can start showing it. When is a good time to talk?`;
   if(l.type==='sell') return `Namaskar ${firstName(l.name)}, this is ${who}. Thank you for choosing us to sell your ${prop}${loc}. I’d like to visit and take a few photos so we can start showing it to buyers. When is a good time to talk?`;
   return l.type==='rent'
