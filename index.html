@@ -522,7 +522,7 @@ td .nm{color:var(--ink)}
 document.querySelector('.logo-m').src=document.querySelector('.side .mark img').src;
 /* ---------- Constants ---------- */
 const STAGES=['New','Contacted','Requirement Confirmed','Options Shared','Site Visit Scheduled','Negotiation','Closed Won','Closed Lost'];
-const PTYPES=['1 BHK Flat','2 BHK Flat','3 BHK Flat','4 BHK Flat','Penthouse','Row House','Bungalow/Villa','Residential Houses','Plot/Land','Residential Plot','Commercial Plot','Commercial Shop','Commercial Office','Showroom','Warehouse/Godown','Agricultural Land','Industrial Land','Other'];
+const PTYPES=['1 BHK Flat','2 BHK Flat','3 BHK Flat','4 BHK Flat','Penthouse','Row House','Bungalow/Villa','Residential Houses','Land','Residential Plot','Commercial Plot','Commercial Shop','Commercial Office','Showroom','Warehouse/Godown','Agricultural Land','Industrial Land','Other'];
 const BHK_TYPES=['Penthouse','Row House','Bungalow/Villa','Residential Houses'];
 const BHKS=['1 RK','1 BHK','2 BHK','3 BHK','4 BHK','5+ BHK'];
 const BASE_LOCS=['Ausa Road','Old Ausa Road','Barshi Road','Ambajogai Road'];
@@ -1095,7 +1095,7 @@ function leadForm(l){
         <label class="f"><span>Email</span><input name="email" type="email" value="${esc(l.email||'')}"></label>
       </div>
       <div class="row">
-        <label class="f"><span>Property type</span><select name="propertyType" data-act="ptype">${opts(PTYPES,l.propertyType,'Choose')}</select></label>
+        <label class="f"><span>Property type</span><select name="propertyType" data-act="ptype">${opts(!l.propertyType||PTYPES.includes(l.propertyType)?PTYPES:[...PTYPES,l.propertyType],l.propertyType,'Choose')}</select></label>
         <label class="f bhk-f"><span>BHK</span><select name="bhk">${opts(BHKS,l.bhk,'Choose')}</select></label>
       </div>
       <label class="f"><span>Enter Location</span><input name="location" value="${esc(l.location||'')}" placeholder="Type location, e.g. Shivaji Nagar, near bus stand"></label>
