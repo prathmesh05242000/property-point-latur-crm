@@ -547,7 +547,8 @@ const inr=new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximum
 function fmtINR(n){return (n==null||n===''||isNaN(n))?'':inr.format(n)}
 function parseMoney(s){
   if(s==null) return null;
-  s=String(s).toLowerCase().replace(/[,₹\s]|rs\.?|inr/g,'');
+  s=String(s).toLowerCase().replace(/[०-९]/g,d=>'०१२३४५६७८९'.indexOf(d)).replace(/[,₹\s]|rs\.?|inr|रु\.?|रुपये/g,'')
+    .replace(/(लाख|लक्ष)$/,'lakh').replace(/(कोटी|करोड़|करोड)$/,'cr').replace(/हजार$/,'thousand');
   if(!s) return null;
   const m=s.match(/^(\d+(?:\.\d+)?)(cr|crore|crores|l|lac|lacs|lakh|lakhs|k|thousand)?$/);
   if(!m) return NaN;
@@ -1073,7 +1074,7 @@ function leadForm(l){
   const cc=l.phone&&!l.phone.startsWith('+91')?'+':'+91';
   const num=l.phone?(l.phone.startsWith('+91')?l.phone.slice(3):l.phone):'';
   const sameWa=!l.whatsapp||l.whatsapp===l.phone;
-  const money=(name,label,val,ph)=>`<label class="f"><span>${label}</span><input name="${name}" inputmode="decimal" value="${val!=null&&val!==''?esc(String(val)):''}" placeholder="${ph}" data-act="money"><small class="mprev">${val?esc(fmtINR(val)):'&nbsp;'}</small></label>`;
+  const money=(name,label,val,ph)=>`<label class="f"><span>${label}</span><input name="${name}" inputmode="text" autocomplete="off" value="${val!=null&&val!==''?esc(String(val)):''}" placeholder="${ph}" data-act="money"><small class="mprev">${val?esc(fmtINR(val)):'&nbsp;'}</small></label>`;
   return `${head(e?'Edit lead':'Add lead')}
   <form class="form" novalidate data-type="${esc(l.type||'none')}" id="leadform">
     <div class="typepick" role="radiogroup" aria-label="Lead type">
