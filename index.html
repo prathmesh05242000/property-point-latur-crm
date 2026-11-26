@@ -918,8 +918,8 @@ function vLead(){
   add('Localities',esc((l.localities||[]).join(', ')));
   add('Location',esc(l.location||''));
   if(l.type==='buy'){ add('Budget',esc(budgetText(l))); add('Payment',esc(l.finance)); add('Timeline',esc(l.timeline)); }
-  else if(l.type==='rentout'){ add('Expected rent',esc(budgetText(l))); add('Deposit',esc(fmtINR(l.deposit))); add('Furnishing',esc(l.furnishing)); add('Available from',esc(dateOnly(l.availableFrom))); add('Preferred tenants',esc(l.preferredTenant)); add('Area',esc(l.area)); add('Address',esc(l.address)); }
-  else if(l.type==='sell'){ add('Asking price',esc(fmtINR(l.askingPrice))); add('Negotiable',esc(l.negotiable)); add('Area',esc(l.area)); add('Address',esc(l.address)); add('Wants to sell',esc(l.timeline)); add('Documents',esc(l.documents)); }
+  else if(l.type==='rentout'){ add('Expected rent',esc(budgetText(l))); add('Deposit',esc(fmtINR(l.deposit))); add('Furnishing',esc(l.furnishing)); add('Available from',esc(dateOnly(l.availableFrom))); add('Preferred tenants',esc(l.preferredTenant)); add('Area',esc(l.area)); add('Address',esc(l.address)); add('Near By',esc(l.nearBy)); }
+  else if(l.type==='sell'){ add('Asking price',esc(fmtINR(l.askingPrice))); add('Negotiable',esc(l.negotiable)); add('Area',esc(l.area)); add('Address',esc(l.address)); add('Near By',esc(l.nearBy)); add('Wants to sell',esc(l.timeline)); add('Documents',esc(l.documents)); }
   else { add('Monthly rent',esc(budgetText(l))); add('Deposit budget',esc(fmtINR(l.deposit))); add('Move-in',esc(dateOnly(l.moveIn))); add('Furnishing',esc(l.furnishing)); }
   add('Mobile',`<a href="tel:${esc(l.phone)}">${esc(fmtPhone(l.phone))}</a>`);
   if(l.whatsapp&&l.whatsapp!==l.phone) add('WhatsApp',esc(fmtPhone(l.whatsapp)));
@@ -1124,6 +1124,7 @@ function leadForm(l){
         <label class="f"><span>Area</span><input name="area" value="${esc(l.area||'')}" placeholder="e.g. 1100 sq ft or 2 guntha"></label>
         <label class="f"><span>Property address</span><input name="address" value="${esc(l.address||'')}" placeholder="Building / plot no., street, landmark"></label>
       </div>
+      <label class="f owner-only"><span>Near By</span><input name="nearBy" value="${esc(l.nearBy||'')}" placeholder="e.g. Near D Mart, 2 min from bus stand, school nearby"></label>
       <p class="sect rent-only">Rental</p>
       <div class="row rent-only">${money('rentMin','Rent from (per month)',l.rentMin,'e.g. 12000')}${money('rentMax','Rent up to (per month)',l.rentMax,'e.g. 15k')}</div>
       <div class="row3 rent-only">${money('deposit','Deposit budget',l.deposit,'e.g. 50000')}
@@ -1183,11 +1184,11 @@ async function submitLead(form,orig,force){
   const assignedTo=isAdmin()?(fd.get('assignedTo')||S.me.id):(orig?orig.assignedTo:S.me.id);
   Object.assign(l,{type,name,phone,whatsapp:wa,email:String(fd.get('email')||'').trim(),propertyType:fd.get('propertyType')||'',bhk:BHK_TYPES.includes(fd.get('propertyType'))?(fd.get('bhk')||''):'',
     localities:(orig&&orig.localities)||[],location:String(fd.get('location')||'').trim(),source:fd.get('source')||'',priority:fd.get('priority')||'',listingUrl:String(fd.get('listingUrl')||'').trim(),notes:String(fd.get('notes')||'').trim()});
-  const TYPE_KEYS=['budgetMin','budgetMax','finance','timeline','rentMin','rentMax','deposit','moveIn','furnishing','askingPrice','negotiable','area','address','documents','expectedRent','availableFrom','preferredTenant'];
+  const TYPE_KEYS=['budgetMin','budgetMax','finance','timeline','rentMin','rentMax','deposit','moveIn','furnishing','askingPrice','negotiable','area','address','nearBy','documents','expectedRent','availableFrom','preferredTenant'];
   const txtf=k=>String(fd.get(k)||'').trim();
   const vals=type==='buy'?{budgetMin:money.budgetMin,budgetMax:money.budgetMax,finance:fd.get('finance')||'',timeline:fd.get('timeline')||''}
-    :type==='sell'?{askingPrice:money.askingPrice,negotiable:fd.get('negotiable')||'',area:txtf('area'),address:txtf('address'),documents:fd.get('documents')||'',timeline:fd.get('sellTimeline')||''}
-    :type==='rentout'?{expectedRent:money.expectedRent,deposit:money.roDeposit,furnishing:fd.get('roFurnishing')||'',availableFrom:fd.get('availableFrom')||'',preferredTenant:fd.get('preferredTenant')||'',area:txtf('area'),address:txtf('address')}
+    :type==='sell'?{askingPrice:money.askingPrice,negotiable:fd.get('negotiable')||'',area:txtf('area'),address:txtf('address'),nearBy:txtf('nearBy'),documents:fd.get('documents')||'',timeline:fd.get('sellTimeline')||''}
+    :type==='rentout'?{expectedRent:money.expectedRent,deposit:money.roDeposit,furnishing:fd.get('roFurnishing')||'',availableFrom:fd.get('availableFrom')||'',preferredTenant:fd.get('preferredTenant')||'',area:txtf('area'),address:txtf('address'),nearBy:txtf('nearBy')}
     :{rentMin:money.rentMin,rentMax:money.rentMax,deposit:money.deposit,moveIn:fd.get('moveIn')||'',furnishing:fd.get('furnishing')||''};
   for(const k of TYPE_KEYS) if(!(k in vals)) delete l[k];
   Object.assign(l,vals);
